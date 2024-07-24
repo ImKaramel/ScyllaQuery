@@ -36,7 +36,7 @@ class ScyllaQuery:
 
     def queryFilterExtended(self, graph, table_name, result, field_name, value, degree):
         query_vertices = f"SELECT DISTINCT {result} FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING"
-        rows = session.execute(query_vertices, [value])
+        rows = session.execute(query_vertices)
 
         result_vertices = []
 
@@ -73,6 +73,11 @@ if __name__ == "__main__":
 
     resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
                                           config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+    resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+                                                          config["queryFilterExtended"]["result"],
+                                                          config["queryFilterExtended"]["fieldName"],
+                                                          config["queryFilterExtended"]["value"],
+                                                          config["queryFilterExtended"]["degree"])
 
     # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
     #                                                       config["queryFilterExtended"]["collection"],
