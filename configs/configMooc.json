@@ -3,8 +3,9 @@
   "_edgeDefinitions": "(EdgeDefinition('actions', fromCollections=[User], toCollections=[Target]),)",
 
   "queryBFS_DFS": {
+    "table_name": "actions",
     "depth": 1,
-    "startVertex": "userid/6956",
+    "startVertex": "6956",
     "fieldName" : "timestamp",
     "value" : 2571264.000
   },
