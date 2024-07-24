@@ -44,7 +44,7 @@ class ScyllaQuery:
             userid = row.userid
 
             query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = %s"
-            edge_count = session.execute(query_degree).one().count
+            edge_count = session.execute(query_degree, userid).one().count
 
             # Фильтрация по степени
             if edge_count >= degree:
