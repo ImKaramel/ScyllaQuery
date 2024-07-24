@@ -74,6 +74,11 @@ if __name__ == "__main__":
 
     resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
                                           config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+    resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+                                                      config["queryFilterExtended"]["result"],
+                                                      config["queryFilterExtended"]["fieldName"],
+                                                      config["queryFilterExtended"]["value"],
+                                                      config["queryFilterExtended"]["degree"])
 
     # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
     #                                                       config["queryFilterExtended"]["collection"],
