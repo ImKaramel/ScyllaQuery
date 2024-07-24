@@ -45,11 +45,11 @@ class ScyllaQuery:
 
             # Запрос для получения количества связей для данной вершины
             query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = %s"
-            edge_count = session.execute(query_degree, [userid]).one().count
+            edge_count = session.execute(query_degree, [result]).one().count
 
             # Фильтрация по степени
             if edge_count >= degree:
-                result_vertices.append(userid)
+                result_vertices.append(result)
 
         print(result_vertices)
 
