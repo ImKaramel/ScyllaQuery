@@ -80,19 +80,20 @@ class ScyllaQuery:
             query = f"""
                 SELECT TARGETID, {fieldName} 
                 FROM {table_name} 
-                WHERE TIMESTAMP < {value}
+                WHERE {fieldName} <= {value}
+                ALLOW FILTERING;
             """
-            rows = session.execute(query, node)
+            rows = session.execute(query)
 
             for row in rows:
-                neighbor = row.TARGETID
-                neighbor_timestamp = row.fieldName
+                neighbor = row.targetid
+                neighbor_timestamp = getattr(row, fieldName)
 
-                if neighbor_timestamp < {fieldName}:
+                if neighbor_timestamp < value:
                     dfs(neighbor, current_depth - 1)
 
         dfs(start_node, depth)
-
+        print(leaf_nodes)
         return leaf_nodes
 
     def queryBFS(self, graph, table_name, start_node, depth, fieldName, value):
@@ -124,7 +125,7 @@ class ScyllaQuery:
             query = f"""
                 SELECT TARGETID, {fieldName} 
                 FROM {table_name} 
-                WHERE TIMESTAMP < {value}
+                WHERE TIMESTAMP > {value}
                 ALLOW FILTERING;
             """
             rows = session.execute(query)
@@ -167,18 +168,12 @@ if __name__ == "__main__":
     #                                                   config["queryFilterExtended"]["degree"])
 
 
-
-    start_time = time.time()
-    resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
-
-    end_time = time.time()
-    execution_time = end_time - start_time
-    print(execution_time, 'секунд - bfs')
-
     #
     # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["depth"], config["queryBFS_DFS"]["startVertex"],
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
+    #
+    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
     #
     # resultQueryFilterSum = Query.queryFilterSum(graph_name,
     #                                             config["queryFilterSum"]["collection"],
