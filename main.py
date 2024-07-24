@@ -19,9 +19,6 @@ class ScyllaQuery:
             file.write("peakMemoryUsage " + str(memory_usage) + " byte" + "\n\n\n")
 
     def queryFilter(self, graph, table_name, field_name, value):
-
-        # start_time = time.time()
-
         rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {value}")
         result = []
         for row in rows:
@@ -36,11 +33,42 @@ class ScyllaQuery:
         return result
 
 
-# Пример использования
 if __name__ == "__main__":
-    query = ScyllaQuery()
-    result = query.queryFilter("graph_name", "your_table_name", "your_field_name", 10)
-    print(result)
+    #config_path = sys.argv[1]
 
-    session.shutdown()
-    cluster.shutdown()
+    #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
+    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
+    #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
+
+    with open(config_path, "r") as f:
+        config = json.load(f)
+
+    graph_name = config["graphName"]
+    Query = ScyllaQuery()
+
+    with open(path + "stats/stats" + graph_name, 'w') as file:
+        pass
+
+    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+                                          config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
+    #                                                       config["queryFilterExtended"]["collection"],
+    #                                                       config["queryFilterExtended"]["edge"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"],
+    #                                                       config["queryFilterExtended"]["degree"])
+    #
+    # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["depth"], config["queryBFS_DFS"]["startVertex"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
+    #
+    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["depth"], config["queryBFS_DFS"]["startVertex"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
+    #
+    # resultQueryFilterSum = Query.queryFilterSum(graph_name,
+    #                                             config["queryFilterSum"]["collection"],
+    #                                             config["queryFilterSum"]["action"],
+    #                                             config["queryFilterSum"]["fieldName"],
+    #                                             config["queryFilterSum"]["value"],
+    #                                             config["queryFilterSum"]["sumValue"])

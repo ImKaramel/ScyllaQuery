@@ -10,8 +10,8 @@
   },
 
   "queryFilter": {
-    "collection": "Action",
-    "fieldName" : "timestamp",
+    "table_name": "actions",
+    "fieldName" : "TIMESTAMP",
     "value" : 2571264.000
   },
 
@@ -45,16 +45,7 @@
             "feature2": "",
             "feature3": ""
         }
-    },
-    "Target": {
-        "_fields": {
-            "target_id": ""
-        }
-    },
-    "User": {
-        "_fields": {
-            "user_id": ""
-        }
     }
+
 
 }
