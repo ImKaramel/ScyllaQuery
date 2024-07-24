@@ -41,7 +41,7 @@ class ScyllaQuery:
         result_vertices = []
 
         for row in rows:
-            userid = row.userid
+            result = row.result
 
             # Запрос для получения количества связей для данной вершины
             query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = %s"
