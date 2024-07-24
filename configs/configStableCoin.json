@@ -1,0 +1,45 @@
+{
+  "graphName" : "StableCoin",
+
+  "queryFilter": {
+    "collection": "Action4",
+    "fieldName" : "value",
+    "value" : 101000000
+  },
+  "queryFilterExtended": {
+    "collection": "Address",
+    "edge":  "Action4",
+    "fieldName" : "value",
+    "value" : 493112.608952,
+    "degree": 5
+  },
+
+  "queryBFS_DFS": {
+    "depth": 8,
+    "startVertex": "Address/0x4f2c813dc8078a9ea7884ff287c0176603e7d1db",
+    "fieldName" : "value",
+    "value" : 0
+  },
+
+  "queryFilterSum": {
+    "collection": "Address",
+    "action": "Action4",
+    "fieldName" : "value",
+    "value" : 80000,
+    "sumValue": 493112.608952
+  },
+
+  "queryTriangles": {
+    "startVertex": "Address/0x46c47b6c38ba5a477a5b7db984fd5d8b3b14961f"
+  },
+
+    "Action4" : {
+        "_fields": {
+            "time_stamp": "",
+            "value": ""
+
+        }
+    },
+    "From": "Address",
+    "To": "Address"
+}

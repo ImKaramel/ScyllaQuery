@@ -1,0 +1,55 @@
+{
+  "graphName" : "RoadNet",
+  "_edgeDefinitions": "(EdgeDefinition('Action2',fromCollections=[NodeId],toCollections=[NodeId]),)",
+
+  "queryBFS_DFS": {
+    "depth": 15,
+    "startVertex": "NodeId/1086292",
+    "fieldName" : "empty",
+    "value" : 0
+  },
+
+  "queryFilter": {
+    "collection": "Action2",
+    "fieldName" : "empty",
+    "value" : 0
+  },
+
+  "queryFilterExtended": {
+    "collection": "NodeId",
+    "edge":  "Action2",
+    "fieldName" : "empty",
+    "value" : 0,
+    "degree": 10
+  },
+
+  "queryFilterSum": {
+    "collection": "NodeId",
+    "action": "Action2",
+    "fieldName" : "empty",
+    "value" : 0,
+    "sumValue": 0
+  },
+
+  "queryTriangles": {
+    "collection" : "NodeId",
+    "startVertex2": "NodeId/1086292",
+    "startVertex": "NodeId/1210809"
+  },
+
+    "Action": {
+        "_fields": {
+        }
+    },
+    "To": {
+        "_fields": {
+            "NodeId": ""
+        }
+    },
+    "From": {
+        "_fields": {
+            "NodeId": ""
+        }
+    }
+
+}

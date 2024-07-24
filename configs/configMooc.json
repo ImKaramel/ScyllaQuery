@@ -1,0 +1,60 @@
+{
+  "graphName" : "MoocGraph",
+  "_edgeDefinitions": "(EdgeDefinition('Action', fromCollections=[User], toCollections=[Target]),)",
+
+  "queryBFS_DFS": {
+    "depth": 1,
+    "startVertex": "User/6956",
+    "fieldName" : "timestamp",
+    "value" : 2571264.000
+  },
+
+  "queryFilter": {
+    "collection": "Action",
+    "fieldName" : "timestamp",
+    "value" : 2571264.000
+  },
+
+  "queryFilterExtended": {
+    "collection": "User",
+    "edge":  "Action",
+    "fieldName" : "timestamp",
+    "value" : 2571264.000,
+    "degree": 2
+  },
+
+  "queryFilterSum": {
+    "collection": "User",
+    "action": "Action",
+    "fieldName" : "timestamp",
+    "value" : 100000,
+    "sumValue": 598165819
+  },
+
+  "queryTriangles": {
+    "startVertex": "User/6956"
+  },
+
+  "Action": {
+        "_fields": {
+            "action_id": "",
+            "timestamp": "",
+            "label": "",
+            "feature0": "",
+            "feature1": "",
+            "feature2": "",
+            "feature3": ""
+        }
+    },
+    "Target": {
+        "_fields": {
+            "target_id": ""
+        }
+    },
+    "User": {
+        "_fields": {
+            "user_id": ""
+        }
+    }
+
+}
