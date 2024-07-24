@@ -79,7 +79,7 @@ class ScyllaQuery:
             query = f"""
                 SELECT TARGETID, {fieldName} 
                 FROM {table_name} 
-                WHERE TIMESTAMP < {value}
+                WHERE {fieldName} <= {value}
                 ALLOW FILTERING;
             """
             rows = session.execute(query)
@@ -124,7 +124,7 @@ class ScyllaQuery:
             query = f"""
                 SELECT TARGETID, {fieldName} 
                 FROM {table_name} 
-                WHERE TIMESTAMP < {value}
+                WHERE TIMESTAMP > {value}
                 ALLOW FILTERING;
             """
             rows = session.execute(query)
