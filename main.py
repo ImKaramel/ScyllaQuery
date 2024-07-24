@@ -2,8 +2,9 @@ import json
 import sys
 import requests
 from cassandra.cluster import Cluster
-path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
-# path = "/Users/madina/Downloads/ScyllaQuery/"
+import time
+# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
+path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -80,19 +81,18 @@ class ScyllaQuery:
                 SELECT TARGETID, {fieldName} 
                 FROM {table_name} 
                 WHERE TIMESTAMP < {value}
-                ALLOW FILTERING;
             """
-            rows = session.execute(query)
+            rows = session.execute(query, node)
 
             for row in rows:
-                neighbor = row.targetid
-                neighbor_timestamp = getattr(row, fieldName)
+                neighbor = row.TARGETID
+                neighbor_timestamp = row.fieldName
 
-                if neighbor_timestamp < value:
+                if neighbor_timestamp < {fieldName}:
                     dfs(neighbor, current_depth - 1)
 
         dfs(start_node, depth)
-        print(leaf_nodes)
+
         return leaf_nodes
 
     def queryBFS(self, graph, table_name, start_node, depth, fieldName, value):
@@ -141,13 +141,13 @@ class ScyllaQuery:
 
 
 if __name__ == "__main__":
-    #config_path = sys.argv[1]
+    # config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    #config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -167,12 +167,18 @@ if __name__ == "__main__":
     #                                                   config["queryFilterExtended"]["degree"])
 
 
-    #
-    # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
-    #
-    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+
+    start_time = time.time()
+    resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
                                     config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
+
+    end_time = time.time()
+    execution_time = end_time - start_time
+    print(execution_time, 'секунд - bfs')
+
+    #
+    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["depth"], config["queryBFS_DFS"]["startVertex"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
     #
     # resultQueryFilterSum = Query.queryFilterSum(graph_name,
     #                                             config["queryFilterSum"]["collection"],
