@@ -4,40 +4,40 @@
 
   "queryBFS_DFS": {
     "depth": 1,
-    "startVertex": "User/6956",
+    "startVertex": "userid/6956",
     "fieldName" : "timestamp",
     "value" : 2571264.000
   },
 
   "queryFilter": {
     "table_name": "actions",
-    "fieldName" : "TIMESTAMP",
+    "fieldName" : "timestamp",
     "value" : 2571264.000
   },
 
   "queryFilterExtended": {
-    "collection": "User",
-    "edge":  "Action",
+    "collection": "userid",
+    "edge":  "actionid",
     "fieldName" : "timestamp",
     "value" : 2571264.000,
     "degree": 2
   },
 
   "queryFilterSum": {
-    "collection": "User",
-    "action": "Action",
+    "collection": "userid",
+    "action": "actionid",
     "fieldName" : "timestamp",
     "value" : 100000,
     "sumValue": 598165819
   },
 
   "queryTriangles": {
-    "startVertex": "User/6956"
+    "startVertex": "userid/6956"
   },
 
-  "Action": {
+  "actions": {
         "_fields": {
-            "action_id": "",
+            "actionid": "",
             "timestamp": "",
             "label": "",
             "feature0": "",

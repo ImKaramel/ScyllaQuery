@@ -2,7 +2,8 @@ import json
 import sys
 import requests
 from cassandra.cluster import Cluster
-path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
+# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
+path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -19,11 +20,12 @@ class ScyllaQuery:
             file.write("peakMemoryUsage " + str(memory_usage) + " byte" + "\n\n\n")
 
     def queryFilter(self, graph, table_name, field_name, value):
-        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {value}")
+        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING")
+        print(rows)
         result = []
         for row in rows:
             result.append({
-                "id": row.id,
+                "actionid": row.actionid,
                 field_name: getattr(row, field_name)
             })
 
@@ -37,9 +39,10 @@ if __name__ == "__main__":
     #config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -47,8 +50,8 @@ if __name__ == "__main__":
     graph_name = config["graphName"]
     Query = ScyllaQuery()
 
-    with open(path + "stats/stats" + graph_name, 'w') as file:
-        pass
+    # with open(path + "stats/stats" + graph_name, 'w') as file:
+    #     pass
 
     resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
                                           config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
