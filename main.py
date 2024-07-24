@@ -37,12 +37,14 @@ class ScyllaQuery:
     def queryFilterExtended(self, graph, table_name, result, field_name, value, degree):
         query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING"
 
-        rows = session.execute(query_vertices, [value])
+        rows = session.execute(query_vertices)
         rowsUnique = session.execute(f"SELECT DISTINCT {result} * FROM {rows}")
         result_vertices = []
 
         for row in rowsUnique:
             userid = row.userid
+            print(userid)
+
 
             query_degree = f"SELECT COUNT(*) FROM {rows} WHERE {result} = %s"
             edge_count = session.execute(query_degree, userid).one().count
@@ -72,8 +74,8 @@ if __name__ == "__main__":
     # with open(path + "stats/stats" + graph_name, 'w') as file:
     #     pass
 
-    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
-                                          config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+    #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
     resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
                                                       config["queryFilterExtended"]["result"],
                                                       config["queryFilterExtended"]["fieldName"],
