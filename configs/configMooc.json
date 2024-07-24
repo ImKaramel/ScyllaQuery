@@ -1,6 +1,6 @@
 {
   "graphName" : "MoocGraph",
-  "_edgeDefinitions": "(EdgeDefinition('Action', fromCollections=[User], toCollections=[Target]),)",
+  "_edgeDefinitions": "(EdgeDefinition('actions', fromCollections=[User], toCollections=[Target]),)",
 
   "queryBFS_DFS": {
     "depth": 1,
@@ -16,8 +16,8 @@
   },
 
   "queryFilterExtended": {
-    "collection": "userid",
-    "edge":  "actionid",
+    "table_name": "actions",
+    "result": "userid",
     "fieldName" : "timestamp",
     "value" : 2571264.000,
     "degree": 2

@@ -34,6 +34,26 @@ class ScyllaQuery:
 
         return result
 
+    def queryFilterExtended(self, graph, table_name, result, field_name, value, degree):
+        query_vertices = f"SELECT DISTINCT USERID FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING"
+        rows = session.execute(query_vertices, [value])
+
+        result_vertices = []
+
+        # Для каждой вершины вычисление степени и фильтрация
+        for row in rows:
+            userid = row.userid
+
+            # Запрос для получения количества связей для данной вершины
+            query_degree = "SELECT COUNT(*) FROM actions WHERE USERID = %s"
+            edge_count = session.execute(query_degree, [userid]).one().count
+
+            # Фильтрация по степени
+            if edge_count >= degree:
+                result_vertices.append(userid)
+
+        print(result_vertices)
+
 
 if __name__ == "__main__":
     #config_path = sys.argv[1]
