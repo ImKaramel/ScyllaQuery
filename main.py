@@ -38,22 +38,25 @@ class ScyllaQuery:
         query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING"
 
         rows = session.execute(query_vertices)
-        rowsUnique = session.execute(f"SELECT DISTINCT {result} * FROM {rows}")
         result_vertices = []
 
-        for row in rowsUnique:
-            userid = row.userid
-            print(userid)
+        for row in rows:
+            print(row)
+            userid = getattr(row, result)  # Извлекаем значение столбца 'result' из каждой строки
 
+        # Подсчитываем ребра, связанные с данной вершиной
+            query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
+            edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
 
-            query_degree = f"SELECT COUNT(*) FROM {rows} WHERE {result} = %s"
-            edge_count = session.execute(query_degree, userid).one().count
-
-            # Фильтрация по степени
+        # Фильтруем по степени
             if edge_count >= degree:
-                result_vertices.append(userid)
+                result_vertices.append(userid)  # Добавляем вершину в список результатов
 
+        # session.shutdown()  # Закрываем сессию
         print(result_vertices)
+
+        return result_vertices  # Возвращаем список вершин
+
 
 
 if __name__ == "__main__":
