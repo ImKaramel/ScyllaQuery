@@ -1,0 +1,10 @@
+queryFilter
+executionTime 2.6740656669999225 s
+peakMemoryUsage 32768 byte
+
+
+queryFilterExtended
+executionTime 42.42605318599999 s
+peakMemoryUsage 458752 byte
+
+
