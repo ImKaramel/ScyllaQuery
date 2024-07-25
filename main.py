@@ -52,33 +52,32 @@ class ScyllaQuery:
             start_time = time.time()
             tracemalloc.start()
 
-            query_all_nodes = f"SELECT {result} FROM {table_name}"
-            all_nodes_result = session.execute(query_all_nodes)
-            all_nodes = [getattr(row, result) for row in all_nodes_result]
-            print(all_nodes_result)
+            query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
+            rows = session.execute(query_vertices)
 
-            result_vertices = []
-
-            for node in all_nodes:
-                query_degree = f"SELECT COUNT(*) AS degree FROM {table_name} WHERE {result} = %s"
-                degree_result = session.execute(query_degree, (node,))
-                level = degree_result.one().degree
-
-                #  Фильтровать узлы по степени
-                if level >= degree:
-                    print(result_vertices)
-                    result_vertices.append({"vertex": node, "degree": level})
-
+            vertex_degrees = {}
+            for row in rows:
+                userid = getattr(row, result)
+                query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
+                edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
+                vertex_degrees[userid] = edge_count
+                print(vertex_degrees)
             end_time = time.time()
             snapshot = tracemalloc.take_snapshot()
             top_stats = snapshot.statistics('lineno')
 
             self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024 )
 
+            result_vertices = [
+                {'vertex': userid, 'degree': edge_count}
+                for userid, edge_count in vertex_degrees.items()
+                if edge_count >= degree
+            ]
+
             with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
                 json.dump(result_vertices, file, indent=4)
 
-            return result_vertices
+            return result_vertices  # Возвращаем список вершин
         else:
             start_time = time.time()
             tracemalloc.start()
@@ -248,7 +247,7 @@ if __name__ == "__main__":
     graph_name = config["graphName"]
     Query = ScyllaQuery()
 
-    with open(path + "stats/stats" + graph_name, 'w') as file:
+    # with open(path + "stats/stats" + graph_name, 'w') as file:
         # pass
 
 
@@ -259,12 +258,12 @@ if __name__ == "__main__":
 
 
 
-    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
-    #                                                       config["queryFilterExtended"]["table_name"],
-    #                                                       config["queryFilterExtended"]["result"],
-    #                                                       config["queryFilterExtended"]["degree"],
-    #                                                       config["queryFilterExtended"]["fieldName"],
-    #                                                       config["queryFilterExtended"]["value"])
+    resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
+                                                          config["queryFilterExtended"]["table_name"],
+                                                          config["queryFilterExtended"]["result"],
+                                                          config["queryFilterExtended"]["degree"],
+                                                          config["queryFilterExtended"]["fieldName"],
+                                                          config["queryFilterExtended"]["value"])
 
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
     #                                       config["queryFilter"]["id"],
@@ -281,10 +280,10 @@ if __name__ == "__main__":
     # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
     #                                       config["queryBFS_DFS"]["to_id"])
-
-    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
-                                          config["queryBFS_DFS"]["to_id"])
+    #
+    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
+    #                                       config["queryBFS_DFS"]["to_id"])
 
     #
 

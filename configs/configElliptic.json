@@ -14,7 +14,7 @@
     "result": "txid",
     "fieldName" : "size",
     "value" : 3000,
-    "degree": 12
+    "degree": 1
   },
 
   "queryBFS_DFS": {

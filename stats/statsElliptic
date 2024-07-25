@@ -7,3 +7,18 @@ executionTime 44.71349096298218 s
 peakMemoryUsage 54.2578125 KB
 
 
+queryFilterExtended
+executionTime 903.9538509845734 s
+peakMemoryUsage 5720.3125 KB
+
+
+queryFilterExtended
+executionTime 75.29081416130066 s
+peakMemoryUsage 243.458984375 KB
+
+
+queryFilterExtended
+executionTime 101.48672819137573 s
+peakMemoryUsage 244.81640625 KB
+
+
