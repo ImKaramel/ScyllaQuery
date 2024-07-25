@@ -3,8 +3,8 @@ import sys
 import tracemalloc
 from cassandra.cluster import Cluster
 import time
-path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
-# path = "/Users/madina/Downloads/ScyllaQuery/"
+# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
+path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -126,7 +126,7 @@ class ScyllaQuery:
                 visited.add(node)
                 cql_query = f"SELECT TARGETID FROM {table_name} WHERE USERID = {node} AND {fieldName} > {value} ALLOW FILTERING"
                 result = session.execute(cql_query)
-                print(visited)
+                # print(visited)
                 for row in result:
                     target_id = row.targetid
                     if target_id not in visited:
@@ -136,8 +136,14 @@ class ScyllaQuery:
         snapshot = tracemalloc.take_snapshot()
         top_stats = snapshot.statistics('lineno')
 
-        self.getStats(graph, "queryDFS", end_time - start_time, top_stats[0].size / 1024  )
+        visited.discard(start_node)
 
+        results = {"leaf_nodes": list(visited)}
+        with open(f"results/results{graph}/queryDFS.json", "w") as file:
+            json.dump(results, file, indent=4)
+
+
+        self.getStats(graph, "queryDFS", end_time - start_time, top_stats[0].size / 1024  )
 
         return visited
 
@@ -153,7 +159,7 @@ class ScyllaQuery:
 
             if level <= depth:
                 visited.add(node)
-                print(visited)
+                # print(visited)
                 cql_query = f"SELECT TARGETID FROM {table_name} WHERE USERID = {node} AND {fieldName} > {value} ALLOW FILTERING"
                 result = session.execute(cql_query)
 
@@ -165,6 +171,12 @@ class ScyllaQuery:
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
         top_stats = snapshot.statistics('lineno')
+
+        visited.discard(start_node)
+
+        results = {"leaf_nodes": list(visited)}
+        with open(f"results/results{graph}/queryBFS.json", "w") as file:
+            json.dump(results, file, indent=4)
 
         self.getStats(graph, "queryBFS", end_time - start_time, top_stats[0].size / 1024  )
 
@@ -199,13 +211,15 @@ class ScyllaQuery:
             for userid, total_sum in user_sums.items()
             if total_sum > sumValue
         ]
+        with open(f"results/results{graph}/queryFilterSum.json", "w") as file:
+            json.dump(result, file, indent=4)
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
         top_stats = snapshot.statistics('lineno')
 
         self.getStats(graph, "queryFilterSum", end_time - start_time, top_stats[0].size / 1024 )
 
-        print(result)
+        # print(result)
         return result
 
 
@@ -214,10 +228,10 @@ if __name__ == "__main__":
     # config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -230,14 +244,15 @@ if __name__ == "__main__":
 
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
     #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
-    resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
-                                                          config["queryFilterExtended"]["result"],
-                                                          config["queryFilterExtended"]["degree"],
-                                                          config["queryFilterExtended"]["fieldName"],
-                                                          config["queryFilterExtended"]["value"])
+
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+    #                                                       config["queryFilterExtended"]["result"],
+    #                                                       config["queryFilterExtended"]["degree"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"])
 
     #
-    # resultQueryDFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
     #
     # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
@@ -245,9 +260,9 @@ if __name__ == "__main__":
     #
 
 
-    # resultQueryFilterSum = Query.queryFilterSum(graph_name,
-    #                                             config["queryFilterSum"]["table_name"],
-    #                                             config["queryFilterSum"]["collection"],
-    #                                             config["queryFilterSum"]["fieldName"],
-    #                                             config["queryFilterSum"]["sumValue"],
-    #                                             config["queryFilterSum"]["value"])
+    resultQueryFilterSum = Query.queryFilterSum(graph_name,
+                                                config["queryFilterSum"]["table_name"],
+                                                config["queryFilterSum"]["collection"],
+                                                config["queryFilterSum"]["fieldName"],
+                                                config["queryFilterSum"]["sumValue"],
+                                                config["queryFilterSum"]["value"])
