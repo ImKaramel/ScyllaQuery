@@ -50,7 +50,7 @@ class ScyllaQuery:
             start_time = time.time()
             tracemalloc.start()
 
-            query_all_nodes = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
+            query_all_nodes = f"SELECT {result} FROM {table_name}"
             all_nodes_result = session.execute(query_all_nodes)
             all_nodes = [row.fromnodeid for row in all_nodes_result]
             print(all_nodes_result)
