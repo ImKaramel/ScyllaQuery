@@ -9,9 +9,9 @@
     "value": 85832
   },
   "queryFilterExtended": {
-    "table_name": "txId",
-    "table_name2" : "table_name2",
-    "edge":  "Action3",
+    "table_name": "txs_edgelist",
+    "table_name2" : "txs_features",
+    "result": "txid",
     "fieldName" : "size",
     "value" : 3000,
     "degree": 12

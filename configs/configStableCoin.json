@@ -2,9 +2,10 @@
   "graphName" : "StableCoin",
 
   "queryFilter": {
-    "collection": "Action4",
+    "table_name": "token_transfers",
+    "id": "transaction_index",
     "fieldName" : "value",
-    "value" : 101000000
+    "value" : 1600110324
   },
   "queryFilterExtended": {
     "collection": "Address",

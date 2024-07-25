@@ -26,6 +26,7 @@ class ScyllaQuery:
         tracemalloc.start()
 
         rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING")
+        print(rows)
 
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
@@ -35,6 +36,7 @@ class ScyllaQuery:
 
         result = []
         for row in rows:
+            print(result)
             result.append({
                 "id": getattr(row, id),
                 field_name: getattr(row, field_name)
@@ -45,7 +47,7 @@ class ScyllaQuery:
 
         return result
 
-    def queryFilterExtended(self, graph, table_name,table_name2, result, degree, field_name, value):
+    def queryFilterExtended(self, graph, table_name, table_name2, result, degree, field_name, value):
         if graph == "RoadNet":
             start_time = time.time()
             tracemalloc.start()
@@ -82,8 +84,7 @@ class ScyllaQuery:
             tracemalloc.start()
             if graph == "Elliptic":
                 query_vertices = f"""SELECT {result} FROM {table_name}
-                                    WHERE {result} IN (SELECT {result} FROM {table_name2} WHERE {field_name} >= {value})
-                                    ALLOW FILTERING;"""
+                                    WHERE {result} IN (SELECT {result} FROM {table_name2} WHERE {field_name} >= {value}) ALLOW FILTERING;"""
             else:
                 query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
             rows = session.execute(query_vertices)
@@ -243,8 +244,9 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
-
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
 
@@ -262,22 +264,24 @@ if __name__ == "__main__":
 
 
 
-    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
-    #                                                       config["queryFilterExtended"]["result"],
-    #                                                       config["queryFilterExtended"]["degree"],
-    #                                                       config["queryFilterExtended"]["fieldName"],
-    #                                                       config["queryFilterExtended"]["value"])
-
-    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
-    #                                       config["queryFilter"]["id"],
-    #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
-
-    resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+    resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
+                                                          config["queryFilterExtended"]["table_name"],
                                                           config["queryFilterExtended"]["table_name2"],
                                                           config["queryFilterExtended"]["result"],
                                                           config["queryFilterExtended"]["degree"],
                                                           config["queryFilterExtended"]["fieldName"],
                                                           config["queryFilterExtended"]["value"])
+
+    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+    #                                       config["queryFilter"]["id"],
+    #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+    #                                                       config["queryFilterExtended"]["table_name2"],
+    #                                                       config["queryFilterExtended"]["result"],
+    #                                                       config["queryFilterExtended"]["degree"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"])
 
     #
     # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
