@@ -3,8 +3,8 @@ import sys
 import tracemalloc
 from cassandra.cluster import Cluster
 import time
-# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
-path = "/Users/madina/Downloads/ScyllaQuery/"
+path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
+# path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -21,22 +21,22 @@ class ScyllaQuery:
             file.write(str(execution_time) + " s" + "\n")
             file.write("peakMemoryUsage " + str(memory_usage) + " KB" + "\n\n\n")
 
-    def queryFilter(self, graph, table_name, field_name, value):
+    def queryFilter(self, graph, table_name, id, field_name, value):
         start_time = time.time()
         tracemalloc.start()
 
-        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING")
+        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} = {int(value)} ALLOW FILTERING")
 
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
         top_stats = snapshot.statistics('lineno')
 
-        self.getStats(graph, "queryFilter", end_time - start_time, top_stats[0].size / 1024  )
+        self.getStats(graph, "queryFilter", end_time - start_time, top_stats[0].size / 1024 )
 
         result = []
         for row in rows:
             result.append({
-                "actionid": row.actionid,
+                "id": getattr(row, id),
                 field_name: getattr(row, field_name)
             })
 
@@ -70,7 +70,7 @@ class ScyllaQuery:
         snapshot = tracemalloc.take_snapshot()
         top_stats = snapshot.statistics('lineno')
 
-        self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024  )
+        self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024 )
 
         result_vertices = [
             {'vertex': userid, 'degree': edge_count}
@@ -81,37 +81,9 @@ class ScyllaQuery:
         with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
             json.dump(result_vertices, file, indent=4)
 
-        # session.shutdown()  # Закрываем сессию
-        # print(result_vertices)
-
         return result_vertices  # Возвращаем список вершин
 
-    # def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
-    #     query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
-    #     rows = session.execute(query_vertices)
-    #     # result_vertices = []
-    #     vertex_degrees = {}
-    #     for row in rows:
-    #         # print(row)
-    #         userid = getattr(row, result)  # Извлекаем значение столбца 'result' из каждой строки
-    #
-    #     # Подсчитываем ребра, связанные с данной вершиной
-    #         query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
-    #         edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
-    #         vertex_degrees[userid] = edge_count
-    #     # Фильтруем по степени
-    #     #     if edge_count >= degree:
-    #     #         result_vertices.append(userid)  # Добавляем вершину в список результатов
-    #     result_vertices = [
-    #         {'vertex': userid, 'degree': edge_count}
-    #         for userid, edge_count in vertex_degrees.items()
-    #         if edge_count >= degree
-    #     ]
-    #
-    #     with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
-    #         json.dump(result_vertices, file, indent=4)
-    #
-    #     return result_vertices
+
     def queryDFS(self, graph, table_name, start_node, depth, fieldName, value):
         visited = set()
         stack = [(start_node, 0)]
@@ -126,7 +98,7 @@ class ScyllaQuery:
                 visited.add(node)
                 cql_query = f"SELECT TARGETID FROM {table_name} WHERE USERID = {node} AND {fieldName} > {value} ALLOW FILTERING"
                 result = session.execute(cql_query)
-                # print(visited)
+                print(visited)
                 for row in result:
                     target_id = row.targetid
                     if target_id not in visited:
@@ -159,7 +131,7 @@ class ScyllaQuery:
 
             if level <= depth:
                 visited.add(node)
-                # print(visited)
+                print(visited)
                 cql_query = f"SELECT TARGETID FROM {table_name} WHERE USERID = {node} AND {fieldName} > {value} ALLOW FILTERING"
                 result = session.execute(cql_query)
 
@@ -227,11 +199,11 @@ class ScyllaQuery:
 if __name__ == "__main__":
     # config_path = sys.argv[1]
 
-    #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
+    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
     # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -242,8 +214,19 @@ if __name__ == "__main__":
     with open(path + "stats/stats" + graph_name, 'w') as file:
         pass
 
+
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
     #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+    #                                                       config["queryFilterExtended"]["result"],
+    #                                                       config["queryFilterExtended"]["degree"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"])
+
+    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+                                          config["queryFilter"]["id"],
+                                          config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
 
     # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
     #                                                       config["queryFilterExtended"]["result"],

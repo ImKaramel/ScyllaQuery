@@ -3,9 +3,10 @@
   "_edgeDefinitions": "(EdgeDefinition('Action3', fromCollections=[txId],toCollections=[txId]),)",
 
   "queryFilter": {
-    "collection": "txId",
-    "fieldName" : "size",
-    "value" : 85832
+    "table_name": "txid_class",
+    "id" : "txId",
+    "fieldName" : "classd",
+    "value" : 1
   },
   "queryFilterExtended": {
     "collection": "txId",

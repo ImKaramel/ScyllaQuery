@@ -12,6 +12,7 @@
 
   "queryFilter": {
     "table_name": "actions",
+    "id" : "actionid",
     "fieldName" : "timestamp",
     "value" : 2571264.000
   },
