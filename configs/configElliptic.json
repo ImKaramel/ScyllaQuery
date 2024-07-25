@@ -4,9 +4,9 @@
 
   "queryFilter": {
     "table_name": "txid_class",
-    "id" : "txId",
+    "id" : "txid",
     "fieldName" : "classd",
-    "value" : 1
+    "value": "'2'"
   },
   "queryFilterExtended": {
     "collection": "txId",
