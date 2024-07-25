@@ -25,7 +25,7 @@ class ScyllaQuery:
         start_time = time.time()
         tracemalloc.start()
 
-        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {int(value)} ALLOW FILTERING")
+        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING")
 
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
@@ -45,7 +45,7 @@ class ScyllaQuery:
 
         return result
 
-    def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
+    def queryFilterExtended(self, graph, table_name,table_name2, result, degree, field_name, value):
         if graph == "RoadNet":
             start_time = time.time()
             tracemalloc.start()
@@ -58,7 +58,7 @@ class ScyllaQuery:
             result_vertices = []
 
             for node in all_nodes:
-                query_degree = f"SELECT COUNT(*) AS degree FROM {table_name} WHERE {result} = %s"
+                query_degree = f"SELECT COUNT(*) AS degree FROM {table_name2} WHERE {result} = %s"
                 degree_result = session.execute(query_degree, (node,))
                 level = degree_result.one().degree
 
@@ -80,15 +80,18 @@ class ScyllaQuery:
         else:
             start_time = time.time()
             tracemalloc.start()
-
-            query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
+            if graph == "Elliptic":
+                query_vertices = f"""SELECT {result} FROM {table_name}
+                                    WHERE {result} IN (SELECT {result} FROM {table_name2} WHERE {field_name} >= {value})
+                                    ALLOW FILTERING;"""
+            else:
+                query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
             rows = session.execute(query_vertices)
             # result_vertices = []
             vertex_degrees = {}
             for row in rows:
                 # print(row)
-                userid = getattr(row, result)  # Извлекаем значение столбца 'result' из каждой строки
-
+                userid = getattr(row, result)
         # Подсчитываем ребра, связанные с данной вершиной
                 query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
                 edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
@@ -270,6 +273,7 @@ if __name__ == "__main__":
     #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
 
     resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+                                                          config["queryFilterExtended"]["table_name2"],
                                                           config["queryFilterExtended"]["result"],
                                                           config["queryFilterExtended"]["degree"],
                                                           config["queryFilterExtended"]["fieldName"],

@@ -21,6 +21,7 @@
 
   "queryFilterExtended": {
     "table_name": "actions",
+    "table_name2" : "",
     "result": "userid",
     "fieldName" : "timestamp",
     "value" : 2571264.000,

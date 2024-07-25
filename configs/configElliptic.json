@@ -5,11 +5,12 @@
   "queryFilter": {
     "table_name": "txid_class",
     "id" : "txid",
-    "fieldName" : "classd",
-    "value": "'2'"
+    "fieldName" : "size",
+    "value": 85832
   },
   "queryFilterExtended": {
-    "collection": "txId",
+    "table_name": "txId",
+    "table_name2" : "table_name2",
     "edge":  "Action3",
     "fieldName" : "size",
     "value" : 3000,
