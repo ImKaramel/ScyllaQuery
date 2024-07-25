@@ -7,7 +7,9 @@
     "depth": 1,
     "startVertex": "6725",
     "fieldName" : "timestamp",
-    "value" : 2571264.000
+    "value" : 2571264.000,
+    "from_id": "userid",
+    "to_id": "targetid"
   },
 
   "queryFilter": {
