@@ -3,8 +3,8 @@ import sys
 import tracemalloc
 from cassandra.cluster import Cluster
 import time
-# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
-path = "/Users/madina/Downloads/ScyllaQuery/"
+path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
+# path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -45,48 +45,11 @@ class ScyllaQuery:
 
         return result
 
-    # def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
-    #
-    #     start_time = time.time()
-    #     tracemalloc.start()
-    #
-    #     query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
-    #     rows = session.execute(query_vertices)
-    #     # result_vertices = []
-    #     vertex_degrees = {}
-    #     for row in rows:
-    #         # print(row)
-    #         userid = getattr(row, result)  # Извлекаем значение столбца 'result' из каждой строки
-    #
-    # # Подсчитываем ребра, связанные с данной вершиной
-    #         query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
-    #         edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
-    #         vertex_degrees[userid] = edge_count
-    #     # Фильтруем по степени
-    #     #     if edge_count >= degree:
-    #     #         result_vertices.append(userid)  # Добавляем вершину в список результатов
-    #
-    #     end_time = time.time()
-    #     snapshot = tracemalloc.take_snapshot()
-    #     top_stats = snapshot.statistics('lineno')
-    #
-    #     self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024  )
-    #
-    #     result_vertices = [
-    #         {'vertex': userid, 'degree': edge_count}
-    #         for userid, edge_count in vertex_degrees.items()
-    #         if edge_count >= degree
-    #     ]
-    #
-    #     with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
-    #         json.dump(result_vertices, file, indent=4)
-    #
-    #     # session.shutdown()  # Закрываем сессию
-    #     # print(result_vertices)
-    #
-    #     return result_vertices  # Возвращаем список вершин
-
     def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
+
+        start_time = time.time()
+        tracemalloc.start()
+
         query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
         rows = session.execute(query_vertices)
         # result_vertices = []
@@ -95,13 +58,20 @@ class ScyllaQuery:
             # print(row)
             userid = getattr(row, result)  # Извлекаем значение столбца 'result' из каждой строки
 
-        # Подсчитываем ребра, связанные с данной вершиной
+    # Подсчитываем ребра, связанные с данной вершиной
             query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
             edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
             vertex_degrees[userid] = edge_count
         # Фильтруем по степени
         #     if edge_count >= degree:
         #         result_vertices.append(userid)  # Добавляем вершину в список результатов
+
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024  )
+
         result_vertices = [
             {'vertex': userid, 'degree': edge_count}
             for userid, edge_count in vertex_degrees.items()
@@ -111,7 +81,37 @@ class ScyllaQuery:
         with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
             json.dump(result_vertices, file, indent=4)
 
-        return result_vertices
+        # session.shutdown()  # Закрываем сессию
+        # print(result_vertices)
+
+        return result_vertices  # Возвращаем список вершин
+
+    # def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
+    #     query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
+    #     rows = session.execute(query_vertices)
+    #     # result_vertices = []
+    #     vertex_degrees = {}
+    #     for row in rows:
+    #         # print(row)
+    #         userid = getattr(row, result)  # Извлекаем значение столбца 'result' из каждой строки
+    #
+    #     # Подсчитываем ребра, связанные с данной вершиной
+    #         query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
+    #         edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
+    #         vertex_degrees[userid] = edge_count
+    #     # Фильтруем по степени
+    #     #     if edge_count >= degree:
+    #     #         result_vertices.append(userid)  # Добавляем вершину в список результатов
+    #     result_vertices = [
+    #         {'vertex': userid, 'degree': edge_count}
+    #         for userid, edge_count in vertex_degrees.items()
+    #         if edge_count >= degree
+    #     ]
+    #
+    #     with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
+    #         json.dump(result_vertices, file, indent=4)
+    #
+    #     return result_vertices
     def queryDFS(self, graph, table_name, start_node, depth, fieldName, value):
         visited = set()
         stack = [(start_node, 0)]
@@ -214,10 +214,10 @@ if __name__ == "__main__":
     # config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
