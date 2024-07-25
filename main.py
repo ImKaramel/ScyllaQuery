@@ -128,7 +128,7 @@ class ScyllaQuery:
 
                 if level <= depth:
                     visited.add(node)
-                    if graph == "RoadNet":
+                    if graph == "RoadNet" or "Elliptic":
                         cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
                     else:
                         cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
@@ -165,7 +165,7 @@ class ScyllaQuery:
                 if level <= depth:
                     visited.add(node)
                     print(visited)
-                    if graph == "RoadNet":
+                    if graph == "RoadNet" or "Elliptic":
                         cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
                     else:
                         cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
