@@ -3,8 +3,8 @@ import sys
 import requests
 from cassandra.cluster import Cluster
 import time
-# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
-path = "/Users/madina/Downloads/ScyllaQuery/"
+path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
+# path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -60,95 +60,53 @@ class ScyllaQuery:
         return result_vertices  # Возвращаем список вершин
 
     def queryDFS(self, graph, table_name, start_node, depth, fieldName, value):
-        """
-        Выполняет DFS-поиск с фильтрацией по времени и глубине.
+        visited = set()
+        stack = [(start_node, 0)]
 
-        :param start_node: Начальная вершина.
-        :param depth: Глубина поиска.
-        :param timestamp: Временная метка для фильтрации.
-        :return: Список листовых вершин.
-        """
+        while stack:
+            node, level = stack.pop()
 
-        leaf_nodes = []
+            if level <= depth:
+                visited.add(node)
+                cql_query = f"SELECT TARGETID FROM {table_name} WHERE USERID = {node} AND {fieldName} > {value} ALLOW FILTERING"
+                result = session.execute(cql_query)
+                print(visited)
+                for row in result:
+                    target_id = row.targetid
+                    if target_id not in visited:
+                        stack.append((target_id, level + 1))
 
-        def dfs(node, current_depth):
-            if current_depth == 0:
-                leaf_nodes.append(node)
-                return
-
-
-            query = f"""
-                SELECT TARGETID, {fieldName} 
-                FROM {table_name} 
-                WHERE {fieldName} <= {value}
-                ALLOW FILTERING;
-            """
-            rows = session.execute(query)
-
-            for row in rows:
-                neighbor = row.targetid
-                neighbor_timestamp = getattr(row, fieldName)
-
-                if neighbor_timestamp < value:
-                    dfs(neighbor, current_depth - 1)
-
-        dfs(start_node, depth)
-        print(leaf_nodes)
-        return leaf_nodes
+        return visited
 
     def queryBFS(self, graph, table_name, start_node, depth, fieldName, value):
-        """
-        Выполняет BFS-поиск с фильтрацией по времени и глубине.
-
-        :param cluster: Cassandra кластер.
-        :param session: Cassandra сессия.
-        :param start_node: Начальная вершина.
-        :param depth: Глубина поиска.
-        :param timestamp: Временная метка для фильтрации.
-        :return: Список листовых вершин.
-        """
-
-        leaf_nodes = []
         visited = set()
-        queue = [(start_node, 0)]  # (вершина, уровень)
+        queue = [(start_node, 0)]
 
         while queue:
             node, level = queue.pop(0)
-            if node in visited:
-                continue
-            visited.add(node)
 
-            if level == depth:
-                leaf_nodes.append(node)
-                continue
+            if level <= depth:
+                visited.add(node)
+                print(visited)
+                cql_query = f"SELECT TARGETID FROM {table_name} WHERE USERID = {node} AND {fieldName} > {value} ALLOW FILTERING"
+                result = session.execute(cql_query)
 
-            query = f"""
-                SELECT TARGETID, {fieldName} 
-                FROM {table_name} 
-                WHERE TIMESTAMP > {value}
-                ALLOW FILTERING;
-            """
-            rows = session.execute(query)
+                for row in result:
+                    target_id = row.targetid
+                    if target_id not in visited:
+                        queue.append((target_id, level + 1))
 
-            for row in rows:
-                neighbor = row.targetid
-                neighbor_timestamp = getattr(row, fieldName)  # Доступ к полю по имени
-
-                if neighbor_timestamp < value and neighbor not in visited:  # Сравниваем с 'value'
-                    queue.append((neighbor, level + 1))
-
-        print(leaf_nodes)
-        return leaf_nodes
+        return visited
 
 
 if __name__ == "__main__":
     # config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    #config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -169,11 +127,11 @@ if __name__ == "__main__":
 
 
     #
-    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["depth"], config["queryBFS_DFS"]["startVertex"],
-    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
-    #
-    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    resultQueryDFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
                                     config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
+    #
+    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
     #
     # resultQueryFilterSum = Query.queryFilterSum(graph_name,
     #                                             config["queryFilterSum"]["collection"],

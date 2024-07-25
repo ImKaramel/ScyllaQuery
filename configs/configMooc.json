@@ -5,7 +5,7 @@
   "queryBFS_DFS": {
     "table_name": "actions",
     "depth": 1,
-    "startVertex": "6956",
+    "startVertex": "6725",
     "fieldName" : "timestamp",
     "value" : 2571264.000
   },
