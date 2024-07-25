@@ -98,19 +98,6 @@ class ScyllaQuery:
 
         return visited
 
-    # def queryFilterSum(self, graph, table_name, sumValue, value):
-
-        # query = f"""SELECT userid, SUM(timestamp) AS total_sum
-        #     FROM {table_name}
-        #     WHERE timestamp > {value}
-        #     GROUP BY userid ALLOW FILTERING;
-        #     HAVING SUM(timestamp) > {sumValue} ;
-        # """
-        #
-        # rows = session.execute(query)
-        #
-        # for row in rows:
-        #     print(f"USERID: {row.userid}, Total Sum: {row.total_sum}")
     def queryFilterSum(self, graph, table_name, collection,fieldName, sumValue, value):
         query = f"""
             SELECT {collection}, {fieldName}
