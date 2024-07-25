@@ -25,8 +25,7 @@ class ScyllaQuery:
         start_time = time.time()
         tracemalloc.start()
 
-
-        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING")
+        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {int(value)} ALLOW FILTERING")
 
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
@@ -129,7 +128,10 @@ class ScyllaQuery:
 
                 if level <= depth:
                     visited.add(node)
-                    cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
+                    if graph == "RoadNet":
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
+                    else:
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
                     result = session.execute(cql_query)
                     print(visited)
                     for row in result:
@@ -149,39 +151,6 @@ class ScyllaQuery:
 
             self.getStats(graph, "queryDFS", end_time - start_time, top_stats[0].size / 1024  )
             return visited
-        else:
-            visited = set()
-            stack = [(start_node, 0)]
-
-            start_time = time.time()
-            tracemalloc.start()
-
-            while stack:
-                node, level = stack.pop()
-
-                if level <= depth:
-                    visited.add(node)
-                    cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
-                    result = session.execute(cql_query)
-                    print(visited)
-                    for row in result:
-                        target_id = row.targetid
-                        if target_id not in visited:
-                            stack.append((target_id, level + 1))
-
-            end_time = time.time()
-            snapshot = tracemalloc.take_snapshot()
-            top_stats = snapshot.statistics('lineno')
-
-            visited.discard(start_node)
-
-            results = {"leaf_nodes": list(visited)}
-            with open(f"results/results{graph}/queryDFS.json", "w") as file:
-                json.dump(results, file, indent=4)
-
-            self.getStats(graph, "queryDFS", end_time - start_time, top_stats[0].size / 1024  )
-
-            return visited
 
     def queryBFS(self, graph, table_name, start_node, depth, fieldName, value, from_id, to_id):
         if graph == "RoadNet":
@@ -197,7 +166,11 @@ class ScyllaQuery:
                 if level <= depth:
                     visited.add(node)
                     print(visited)
-                    cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
+                    if graph == "RoadNet":
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
+                    else:
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
+
                     result = session.execute(cql_query)
                     for row in result:
                         tonodeid = getattr(row, to_id)
@@ -214,41 +187,7 @@ class ScyllaQuery:
             with open(f"results/results{graph}/queryBFS.json", "w") as file:
                 json.dump(results, file, indent=4)
 
-            self.getStats(graph, "queryBFS", end_time - start_time, top_stats[0].size / 1024  )
-        else:
-            visited = set()
-            queue = [(start_node, 0)]
-
-            start_time = time.time()
-            tracemalloc.start()
-
-            while queue:
-                node, level = queue.pop(0)
-
-                if level <= depth:
-                    visited.add(node)
-                    print(visited)
-                    cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
-                    result = session.execute(cql_query)
-
-                    for row in result:
-                        target_id = row.targetid
-                        if target_id not in visited:
-                            queue.append((target_id, level + 1))
-
-            end_time = time.time()
-            snapshot = tracemalloc.take_snapshot()
-            top_stats = snapshot.statistics('lineno')
-
-            visited.discard(start_node)
-
-            results = {"leaf_nodes": list(visited)}
-            with open(f"results/results{graph}/queryBFS.json", "w") as file:
-                json.dump(results, file, indent=4)
-
-            self.getStats(graph, "queryBFS", end_time - start_time, top_stats[0].size / 1024  )
-
-            return visited
+            self.getStats(graph, "queryBFS", end_time - start_time, top_stats[0].size / 1024)
 
     def queryFilterSum(self, graph, table_name, collection,fieldName, sumValue, value):
         if graph == "RoadNet":
@@ -301,9 +240,7 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
-
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -315,10 +252,10 @@ if __name__ == "__main__":
         pass
 
 
-    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
-                                          config["queryFilter"]["id"],
-                                          config["queryFilter"]["fieldName"],
-                                          config["queryFilter"]["value"])
+    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+    #                                       config["queryFilter"]["id"],
+    #                                       config["queryFilter"]["fieldName"],
+    #                                       config["queryFilter"]["value"])
 
 
 
@@ -332,11 +269,11 @@ if __name__ == "__main__":
     #                                       config["queryFilter"]["id"],
     #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
 
-    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
-    #                                                       config["queryFilterExtended"]["result"],
-    #                                                       config["queryFilterExtended"]["degree"],
-    #                                                       config["queryFilterExtended"]["fieldName"],
-    #                                                       config["queryFilterExtended"]["value"])
+    resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+                                                          config["queryFilterExtended"]["result"],
+                                                          config["queryFilterExtended"]["degree"],
+                                                          config["queryFilterExtended"]["fieldName"],
+                                                          config["queryFilterExtended"]["value"])
 
     #
     # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
