@@ -25,11 +25,13 @@
   },
 
   "queryFilterSum": {
+    "table_name": "actions",
     "collection": "userid",
-    "action": "actionid",
     "fieldName" : "timestamp",
     "value" : 100000,
-    "sumValue": 598165819
+    "value_field": "actionid",
+    "sumValue": 598165819,
+    "user_id" : 6725
   },
 
   "queryTriangles": {

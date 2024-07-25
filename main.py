@@ -3,8 +3,8 @@ import sys
 import requests
 from cassandra.cluster import Cluster
 import time
-path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
-# path = "/Users/madina/Downloads/ScyllaQuery/"
+# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
+path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -98,15 +98,40 @@ class ScyllaQuery:
 
         return visited
 
+    def queryFilterSum(self, graph, user_id, table_name, value_field, sumValue):
+        query = f"""
+            SELECT targetid, {value_field}
+            FROM {table_name}
+            WHERE userid = {user_id} ALLOW FILTERING;
+        """
+        rows = session.execute(query)
+
+        total_sum = 0.0
+
+        for row in rows:
+            neighbor_value = getattr(row, value_field)
+
+            if neighbor_value > sumValue:
+                total_sum += neighbor_value
+
+        print(total_sum)
+        return total_sum
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     # config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    #config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -127,15 +152,16 @@ if __name__ == "__main__":
 
 
     #
-    resultQueryDFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
+    # resultQueryDFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
     #
     # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"])
     #
-    # resultQueryFilterSum = Query.queryFilterSum(graph_name,
-    #                                             config["queryFilterSum"]["collection"],
-    #                                             config["queryFilterSum"]["action"],
-    #                                             config["queryFilterSum"]["fieldName"],
-    #                                             config["queryFilterSum"]["value"],
-    #                                             config["queryFilterSum"]["sumValue"])
+
+
+    resultQueryFilterSum = Query.queryFilterSum(graph_name,
+                                                config["queryFilterSum"]["user_id"],
+                                                config["queryFilterSum"]['table_name'],
+                                                config["queryFilterSum"]["value_field"],
+                                                config["queryFilterSum"]["sumValue"])
