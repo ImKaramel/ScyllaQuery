@@ -13,7 +13,7 @@
     "table_name" : "txs_features",
     "result": "txid",
     "fieldName" : "size",
-    "value" : 2000,
+    "value" : 3000,
     "degree": 12
   },
 

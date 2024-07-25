@@ -249,7 +249,7 @@ if __name__ == "__main__":
     Query = ScyllaQuery()
 
     with open(path + "stats/stats" + graph_name, 'w') as file:
-        pass
+        # pass
 
 
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
@@ -259,12 +259,12 @@ if __name__ == "__main__":
 
 
 
-    resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
-                                                          config["queryFilterExtended"]["table_name"],
-                                                          config["queryFilterExtended"]["result"],
-                                                          config["queryFilterExtended"]["degree"],
-                                                          config["queryFilterExtended"]["fieldName"],
-                                                          config["queryFilterExtended"]["value"])
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
+    #                                                       config["queryFilterExtended"]["table_name"],
+    #                                                       config["queryFilterExtended"]["result"],
+    #                                                       config["queryFilterExtended"]["degree"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"])
 
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
     #                                       config["queryFilter"]["id"],
@@ -281,10 +281,10 @@ if __name__ == "__main__":
     # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
     #                                       config["queryBFS_DFS"]["to_id"])
-    #
-    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
-    #                                       config["queryBFS_DFS"]["to_id"])
+
+    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
+                                          config["queryBFS_DFS"]["to_id"])
 
     #
 

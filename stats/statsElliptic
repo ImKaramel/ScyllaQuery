@@ -1,5 +1,9 @@
-queryFilterExtended
-executionTime 953.3759150505066 s
-peakMemoryUsage 5716.3046875 KB
+queryBFS
+executionTime 51.69964909553528 s
+peakMemoryUsage 54.2109375 KB
+
+queryDFS
+executionTime 44.71349096298218 s
+peakMemoryUsage 54.2578125 KB
 
 
