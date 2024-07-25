@@ -1,10 +1,10 @@
 import json
 import sys
-import requests
+import tracemalloc
 from cassandra.cluster import Cluster
 import time
-# path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery"
-path = "/Users/madina/Downloads/ScyllaQuery/"
+path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
+# path = "/Users/madina/Downloads/ScyllaQuery/"
 
 cluster = Cluster(contact_points=['localhost'], port=9042)
 session = cluster.connect('scylla')
@@ -19,11 +19,20 @@ class ScyllaQuery:
             file.write(nameQuery + "\n")
             file.write("executionTime ")
             file.write(str(execution_time) + " s" + "\n")
-            file.write("peakMemoryUsage " + str(memory_usage) + " byte" + "\n\n\n")
+            file.write("peakMemoryUsage " + str(memory_usage) + " KB" + "\n\n\n")
 
     def queryFilter(self, graph, table_name, field_name, value):
+        start_time = time.time()
+        tracemalloc.start()
+
         rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING")
-        print(rows)
+
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryFilter", end_time - start_time, top_stats[0].size / 1024  )
+
         result = []
         for row in rows:
             result.append({
@@ -37,6 +46,10 @@ class ScyllaQuery:
         return result
 
     def queryFilterExtended(self, graph, table_name, result, field_name, value, degree):
+
+        start_time = time.time()
+        tracemalloc.start()
+
         query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
 
         rows = session.execute(query_vertices)
@@ -53,6 +66,11 @@ class ScyllaQuery:
         # Фильтруем по степени
             if edge_count >= degree:
                 result_vertices.append(userid)  # Добавляем вершину в список результатов
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024  )
 
         # session.shutdown()  # Закрываем сессию
         print(result_vertices)
@@ -62,6 +80,9 @@ class ScyllaQuery:
     def queryDFS(self, graph, table_name, start_node, depth, fieldName, value):
         visited = set()
         stack = [(start_node, 0)]
+
+        start_time = time.time()
+        tracemalloc.start()
 
         while stack:
             node, level = stack.pop()
@@ -76,11 +97,21 @@ class ScyllaQuery:
                     if target_id not in visited:
                         stack.append((target_id, level + 1))
 
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryDFS", end_time - start_time, top_stats[0].size / 1024  )
+
+
         return visited
 
     def queryBFS(self, graph, table_name, start_node, depth, fieldName, value):
         visited = set()
         queue = [(start_node, 0)]
+
+        start_time = time.time()
+        tracemalloc.start()
 
         while queue:
             node, level = queue.pop(0)
@@ -96,9 +127,20 @@ class ScyllaQuery:
                     if target_id not in visited:
                         queue.append((target_id, level + 1))
 
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryBFS", end_time - start_time, top_stats[0].size / 1024  )
+
+
         return visited
 
     def queryFilterSum(self, graph, table_name, collection,fieldName, sumValue, value):
+
+        start_time = time.time()
+        tracemalloc.start()
+
         query = f"""
             SELECT {collection}, {fieldName}
             FROM {table_name}
@@ -122,14 +164,14 @@ class ScyllaQuery:
             for userid, total_sum in user_sums.items()
             if total_sum > sumValue
         ]
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryFilterSum", end_time - start_time, top_stats[0].size / 1024 )
+
         print(result)
         return result
-
-
-
-
-
-
 
 
 
@@ -137,10 +179,10 @@ if __name__ == "__main__":
     # config_path = sys.argv[1]
 
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
-    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
+    config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
 
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -148,11 +190,11 @@ if __name__ == "__main__":
     graph_name = config["graphName"]
     Query = ScyllaQuery()
 
-    # with open(path + "stats/stats" + graph_name, 'w') as file:
-    #     pass
+    with open(path + "stats/stats" + graph_name, 'w') as file:
+        pass
 
-    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
-    #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
+    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+                                          config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
     # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
     #                                                   config["queryFilterExtended"]["result"],
     #                                                   config["queryFilterExtended"]["fieldName"],
@@ -169,9 +211,9 @@ if __name__ == "__main__":
     #
 
 
-    resultQueryFilterSum = Query.queryFilterSum(graph_name,
-                                                config["queryFilterSum"]["table_name"],
-                                                config["queryFilterSum"]["collection"],
-                                                config["queryFilterSum"]["fieldName"],
-                                                config["queryFilterSum"]["sumValue"],
-                                                config["queryFilterSum"]["value"])
+    # resultQueryFilterSum = Query.queryFilterSum(graph_name,
+    #                                             config["queryFilterSum"]["table_name"],
+    #                                             config["queryFilterSum"]["collection"],
+    #                                             config["queryFilterSum"]["fieldName"],
+    #                                             config["queryFilterSum"]["sumValue"],
+    #                                             config["queryFilterSum"]["value"])
