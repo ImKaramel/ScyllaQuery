@@ -25,8 +25,7 @@ class ScyllaQuery:
         start_time = time.time()
         tracemalloc.start()
 
-        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING")
-        print(rows)
+        rows = session.execute(f"SELECT * FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING")
 
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
@@ -36,7 +35,6 @@ class ScyllaQuery:
 
         result = []
         for row in rows:
-            print(result)
             result.append({
                 "id": getattr(row, id),
                 field_name: getattr(row, field_name)
@@ -77,25 +75,19 @@ class ScyllaQuery:
             with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
                 json.dump(result_vertices, file, indent=4)
 
-            return result_vertices  # Возвращаем список вершин
+            return result_vertices
         else:
             start_time = time.time()
             tracemalloc.start()
             query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
             rows = session.execute(query_vertices)
-            # result_vertices = []
+
             vertex_degrees = {}
             for row in rows:
-                # print(row)
                 userid = getattr(row, result)
-        # Подсчитываем ребра, связанные с данной вершиной
                 query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
                 edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
                 vertex_degrees[userid] = edge_count
-            # Фильтруем по степени
-            #     if edge_count >= degree:
-            #         result_vertices.append(userid)  # Добавляем вершину в список результатов
-
             end_time = time.time()
             snapshot = tracemalloc.take_snapshot()
             top_stats = snapshot.statistics('lineno')
@@ -111,7 +103,7 @@ class ScyllaQuery:
             with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
                 json.dump(result_vertices, file, indent=4)
 
-            return result_vertices  # Возвращаем список вершин
+            return result_vertices
 
 
 
@@ -201,7 +193,6 @@ class ScyllaQuery:
             """
             rows = session.execute(query, (value,))
 
-            # Используем словарь для подсчета суммы timestamp для каждого userid
             user_sums = {}
 
             for row in rows:
@@ -248,34 +239,34 @@ if __name__ == "__main__":
     Query = ScyllaQuery()
 
     # with open(path + "stats/stats" + graph_name, 'w') as file:
-        # pass
+    #     pass
 
 
-    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
-    #                                       config["queryFilter"]["id"],
-    #                                       config["queryFilter"]["fieldName"],
-    #                                       config["queryFilter"]["value"])
+    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+                                          config["queryFilter"]["id"],
+                                          config["queryFilter"]["fieldName"],
+                                          config["queryFilter"]["value"])
 
 
 
-    resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
-                                                          config["queryFilterExtended"]["table_name"],
-                                                          config["queryFilterExtended"]["result"],
-                                                          config["queryFilterExtended"]["degree"],
-                                                          config["queryFilterExtended"]["fieldName"],
-                                                          config["queryFilterExtended"]["value"])
-
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
+    #                                                       config["queryFilterExtended"]["table_name"],
+    #                                                       config["queryFilterExtended"]["result"],
+    #                                                       config["queryFilterExtended"]["degree"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"])
+    #
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
     #                                       config["queryFilter"]["id"],
     #                                       config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
-
+    #
     # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
     #                                                       config["queryFilterExtended"]["table_name2"],
     #                                                       config["queryFilterExtended"]["result"],
     #                                                       config["queryFilterExtended"]["degree"],
     #                                                       config["queryFilterExtended"]["fieldName"],
     #                                                       config["queryFilterExtended"]["value"])
-
+    #
     #
     # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
@@ -285,7 +276,7 @@ if __name__ == "__main__":
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
     #                                       config["queryBFS_DFS"]["to_id"])
 
-    #
+
 
     # resultQueryFilterSum = Query.queryFilterSum(graph_name,
     #                                             config["queryFilterSum"]["table_name"],

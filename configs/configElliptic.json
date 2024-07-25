@@ -5,8 +5,8 @@
   "queryFilter": {
     "table_name": "txid_class",
     "id" : "txid",
-    "fieldName" : "size",
-    "value": 85832
+    "fieldName" : "classd",
+    "value": "'2'"
   },
   "queryFilterExtended": {
     "table_name2": "txs_edgelist",
