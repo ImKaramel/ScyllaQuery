@@ -98,24 +98,46 @@ class ScyllaQuery:
 
         return visited
 
-    def queryFilterSum(self, graph, user_id, table_name, value_field, sumValue):
-        query = f"""
-            SELECT targetid, {value_field}
-            FROM {table_name}
-            WHERE userid = {user_id} ALLOW FILTERING;
-        """
-        rows = session.execute(query)
+    # def queryFilterSum(self, graph, table_name, sumValue, value):
 
-        total_sum = 0.0
+        # query = f"""SELECT userid, SUM(timestamp) AS total_sum
+        #     FROM {table_name}
+        #     WHERE timestamp > {value}
+        #     GROUP BY userid ALLOW FILTERING;
+        #     HAVING SUM(timestamp) > {sumValue} ;
+        # """
+        #
+        # rows = session.execute(query)
+        #
+        # for row in rows:
+        #     print(f"USERID: {row.userid}, Total Sum: {row.total_sum}")
+    def queryFilterSum(self, graph, table_name, collection,fieldName, sumValue, value):
+        query = f"""
+            SELECT {collection}, {fieldName}
+            FROM {table_name}
+            WHERE {fieldName} > %s ALLOW FILTERING
+        """
+        rows = session.execute(query, (value,))
+
+        # Используем словарь для подсчета суммы timestamp для каждого userid
+        user_sums = {}
 
         for row in rows:
-            neighbor_value = getattr(row, value_field)
+            userid = row.userid
+            timestamp = getattr(row, fieldName)
+            if userid not in user_sums:
+                user_sums[userid] = 0.0
+            user_sums[userid] += timestamp
 
-            if neighbor_value > sumValue:
-                total_sum += neighbor_value
+        # Фильтруем результаты по сумме
+        result = [
+            {'vertex': userid, 'sum': total_sum}
+            for userid, total_sum in user_sums.items()
+            if total_sum > sumValue
+        ]
+        print(result)
+        return result
 
-        print(total_sum)
-        return total_sum
 
 
 
@@ -161,7 +183,8 @@ if __name__ == "__main__":
 
 
     resultQueryFilterSum = Query.queryFilterSum(graph_name,
-                                                config["queryFilterSum"]["user_id"],
-                                                config["queryFilterSum"]['table_name'],
-                                                config["queryFilterSum"]["value_field"],
-                                                config["queryFilterSum"]["sumValue"])
+                                                config["queryFilterSum"]["table_name"],
+                                                config["queryFilterSum"]["collection"],
+                                                config["queryFilterSum"]["fieldName"],
+                                                config["queryFilterSum"]["sumValue"],
+                                                config["queryFilterSum"]["value"])
