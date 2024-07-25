@@ -45,7 +45,7 @@ class ScyllaQuery:
 
         return result
 
-    def queryFilterExtended(self, graph, table_name, result, field_name, value, degree):
+    def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
 
         start_time = time.time()
         tracemalloc.start()
@@ -72,8 +72,11 @@ class ScyllaQuery:
 
         self.getStats(graph, "queryFilterExtended", end_time - start_time, top_stats[0].size / 1024  )
 
+        with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
+            json.dump(result_vertices, file, indent=4)
+
         # session.shutdown()  # Закрываем сессию
-        print(result_vertices)
+        # print(result_vertices)
 
         return result_vertices  # Возвращаем список вершин
 
@@ -195,12 +198,11 @@ if __name__ == "__main__":
 
     resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
                                           config["queryFilter"]["fieldName"], config["queryFilter"]["value"])
-    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
-    #                                                   config["queryFilterExtended"]["result"],
-    #                                                   config["queryFilterExtended"]["fieldName"],
-    #                                                   config["queryFilterExtended"]["value"],
-    #                                                   config["queryFilterExtended"]["degree"])
-
+    resultQueryFilterExtended = Query.queryFilterExtended(graph_name, config["queryFilterExtended"]["table_name"],
+                                                          config["queryFilterExtended"]["result"],
+                                                          config["queryFilterExtended"]["degree"],
+                                                          config["queryFilterExtended"]["fieldName"],
+                                                          config["queryFilterExtended"]["value"])
 
     #
     # resultQueryDFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
