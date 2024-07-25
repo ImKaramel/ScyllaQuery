@@ -47,20 +47,20 @@ class ScyllaQuery:
 
         return result
 
-    def queryFilterExtended(self, graph, table_name, table_name2, result, degree, field_name, value):
-        if graph == "RoadNet":
+    def queryFilterExtended(self, graph, table_name, result, degree, field_name, value):
+        if graph == "RoadNet" or "Elliptic":
             start_time = time.time()
             tracemalloc.start()
 
             query_all_nodes = f"SELECT {result} FROM {table_name}"
             all_nodes_result = session.execute(query_all_nodes)
-            all_nodes = [row.fromnodeid for row in all_nodes_result]
+            all_nodes = [getattr(row, result) for row in all_nodes_result]
             print(all_nodes_result)
 
             result_vertices = []
 
             for node in all_nodes:
-                query_degree = f"SELECT COUNT(*) AS degree FROM {table_name2} WHERE {result} = %s"
+                query_degree = f"SELECT COUNT(*) AS degree FROM {table_name} WHERE {result} = %s"
                 degree_result = session.execute(query_degree, (node,))
                 level = degree_result.one().degree
 
@@ -82,11 +82,7 @@ class ScyllaQuery:
         else:
             start_time = time.time()
             tracemalloc.start()
-            if graph == "Elliptic":
-                query_vertices = f"""SELECT {result} FROM {table_name}
-                                    WHERE {result} IN (SELECT {result} FROM {table_name2} WHERE {field_name} >= {value}) ALLOW FILTERING;"""
-            else:
-                query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
+            query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
             rows = session.execute(query_vertices)
             # result_vertices = []
             vertex_degrees = {}
@@ -119,8 +115,8 @@ class ScyllaQuery:
             return result_vertices  # Возвращаем список вершин
 
 
+
     def queryDFS(self, graph, table_name, start_node, depth, fieldName, value,  from_id, to_id):
-        if graph == "RoadNet":
             visited = set()
             stack = [(start_node, 0)]
 
@@ -157,7 +153,6 @@ class ScyllaQuery:
             return visited
 
     def queryBFS(self, graph, table_name, start_node, depth, fieldName, value, from_id, to_id):
-        if graph == "RoadNet":
             visited = set()
             queue = [(start_node, 0)]
 
@@ -266,7 +261,6 @@ if __name__ == "__main__":
 
     resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
                                                           config["queryFilterExtended"]["table_name"],
-                                                          config["queryFilterExtended"]["table_name2"],
                                                           config["queryFilterExtended"]["result"],
                                                           config["queryFilterExtended"]["degree"],
                                                           config["queryFilterExtended"]["fieldName"],

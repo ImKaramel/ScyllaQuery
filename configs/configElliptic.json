@@ -9,19 +9,22 @@
     "value": 85832
   },
   "queryFilterExtended": {
-    "table_name": "txs_edgelist",
-    "table_name2" : "txs_features",
+    "table_name2": "txs_edgelist",
+    "table_name" : "txs_features",
     "result": "txid",
     "fieldName" : "size",
-    "value" : 3000,
+    "value" : 2000,
     "degree": 12
   },
 
   "queryBFS_DFS": {
+    "table_name": "txs_edgelist",
     "depth": 9,
-    "startVertex": "txId/158652955",
-    "fieldName" : "size",
-    "value" : 100
+    "startVertex": "158652955",
+    "fieldName" : "txid1",
+    "value" : 100,
+    "from_id": "txid1",
+    "to_id": "txid2"
   },
 
   "queryFilterSum": {
