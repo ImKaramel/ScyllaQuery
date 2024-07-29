@@ -35,6 +35,7 @@ class ScyllaQuery:
 
         result = []
         for row in rows:
+            print(result)
             result.append({
                 "id": getattr(row, id),
                 field_name: getattr(row, field_name)
@@ -59,7 +60,7 @@ class ScyllaQuery:
                 query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
                 edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
                 vertex_degrees[userid] = edge_count
-                print(vertex_degrees)
+                # print(vertex_degrees)
             end_time = time.time()
             snapshot = tracemalloc.take_snapshot()
             top_stats = snapshot.statistics('lineno')
@@ -229,9 +230,9 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
 
@@ -248,7 +249,7 @@ if __name__ == "__main__":
     #                                       config["queryFilter"]["value"])
 
 
-
+    #
     resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
                                                           config["queryFilterExtended"]["table_name"],
                                                           config["queryFilterExtended"]["result"],
@@ -272,10 +273,10 @@ if __name__ == "__main__":
     #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
     #                                       config["queryBFS_DFS"]["to_id"])
     #
-    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
-    #                                       config["queryBFS_DFS"]["to_id"])
-    #
+    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
+                                          config["queryBFS_DFS"]["to_id"])
+
 
 
     # resultQueryFilterSum = Query.queryFilterSum(graph_name,

@@ -5,21 +5,26 @@
     "table_name": "token_transfers",
     "id": "transaction_index",
     "fieldName" : "value",
-    "value" : 1600110324
+    "value" : 2195.036686
   },
   "queryFilterExtended": {
-    "collection": "Address",
-    "edge":  "Action4",
+    "table_name": "token_transfers",
+    "result":  "actionid",
     "fieldName" : "value",
-    "value" : 493112.608952,
-    "degree": 5
+    "value" : 2195.036686,
+    "degree": 1
   },
 
+
+
   "queryBFS_DFS": {
+    "table_name": "token_transfers",
     "depth": 8,
-    "startVertex": "Address/0x4f2c813dc8078a9ea7884ff287c0176603e7d1db",
-    "fieldName" : "value",
-    "value" : 0
+    "startVertex": "'0x4f2c813dc8078a9ea7884ff287c0176603e7d1db'",
+    "fieldName" : "from_address",
+    "value" : 2571264.000,
+    "from_id": "from_address",
+    "to_id": "to_address"
   },
 
   "queryFilterSum": {
@@ -32,15 +37,5 @@
 
   "queryTriangles": {
     "startVertex": "Address/0x46c47b6c38ba5a477a5b7db984fd5d8b3b14961f"
-  },
-
-    "Action4" : {
-        "_fields": {
-            "time_stamp": "",
-            "value": ""
-
-        }
-    },
-    "From": "Address",
-    "To": "Address"
+  }
 }
