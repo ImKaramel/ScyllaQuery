@@ -1,7 +1,7 @@
 [
     {
         "vertex": 6842,
-        "degree": 30
+        "degree": 28
     },
     {
         "vertex": 7026,
@@ -9,26 +9,26 @@
     },
     {
         "vertex": 6725,
-        "degree": 25
+        "degree": 24
     },
     {
         "vertex": 4786,
-        "degree": 195
+        "degree": 186
     },
     {
         "vertex": 195,
-        "degree": 29
+        "degree": 25
     },
     {
         "vertex": 3010,
-        "degree": 193
+        "degree": 178
     },
     {
         "vertex": 70,
-        "degree": 198
+        "degree": 182
     },
     {
         "vertex": 3070,
-        "degree": 259
+        "degree": 233
     }
 ]

@@ -1,35 +1,26 @@
-queryFilter
-executionTime 0.13078594207763672 s
-peakMemoryUsage 6.20703125 KB
-
 
 queryFilter
-executionTime 0.1542370319366455 s
+executionTime 0.01803898811340332 s
 peakMemoryUsage 6.20703125 KB
 
 
 queryFilterExtended
-executionTime 131.50355410575867 s
-peakMemoryUsage 56.3955078125 KB
+executionTime 18.96412992477417 s
+peakMemoryUsage 26.287109375 KB
 
 
 queryBFS
-executionTime 180.91629099845886 s
-peakMemoryUsage 51.515625 KB
+executionTime 0.22308683395385742 s
+peakMemoryUsage 47.5234375 KB
 
 
 queryDFS
-executionTime 161.58659625053406 s
-peakMemoryUsage 69.16015625 KB
+executionTime 0.25296807289123535 s
+peakMemoryUsage 51.7578125 KB
 
 
 queryFilterSum
-executionTime 9.40866208076477 s
-peakMemoryUsage 303.91796875 KB
-
-
-queryBFS
-executionTime 185.7519130706787 s
-peakMemoryUsage 82.3681640625 KB
+executionTime 18.415216207504272 s
+peakMemoryUsage 306.0244140625 KB
 
 
