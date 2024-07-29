@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS token_transfers (
         time_stamp int, 
         contract_address text,
         value float,
-        PRIMARY KEY (block_number, transaction_index, from_address, to_address, time_stamp, contract_address, value)
+        actionid int PRIMARY KEY
     );

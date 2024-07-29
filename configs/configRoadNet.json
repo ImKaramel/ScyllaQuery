@@ -24,7 +24,7 @@
     "result":  "fromnodeid",
     "fieldName" : "tonodeid",
     "value" : 1965661,
-    "degree": 10
+    "degree": 3
   },
 
   "queryFilterSum": {

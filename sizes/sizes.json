@@ -1,0 +1,21 @@
+{
+  "Elliptic": {
+    "txis_class": 2361914,
+    "txs_edgelist" : 4470584,
+    "txs_features" : 7973759
+  },
+
+  "Mooc": {
+    "actions": 10649441,
+    "actions_labels" : 3594646,
+    "actions_features": 35882529
+  },
+
+  "StableCoin":{
+    "token_transfers": 2498158082
+  },
+
+  "RoadNet": {
+    "roadnet": 82254006
+  }
+}

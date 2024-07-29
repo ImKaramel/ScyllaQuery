@@ -28,3 +28,8 @@ executionTime 9.40866208076477 s
 peakMemoryUsage 303.91796875 KB
 
 
+queryBFS
+executionTime 185.7519130706787 s
+peakMemoryUsage 82.3681640625 KB
+
+
