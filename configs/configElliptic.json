@@ -10,7 +10,7 @@
   },
   "queryFilterExtended": {
     "table_name2": "txs_edgelist",
-    "table_name" : "txs_features",
+    "table_name" : "elliptic",
     "result": "txid",
     "fieldName" : "size",
     "value" : 3000,

@@ -35,7 +35,7 @@ class ScyllaQuery:
 
         result = []
         for row in rows:
-            print(result)
+            # print(result)
             result.append({
                 "id": getattr(row, id),
                 field_name: getattr(row, field_name)
@@ -229,9 +229,9 @@ if __name__ == "__main__":
     # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -279,9 +279,9 @@ if __name__ == "__main__":
 
 
 
-    resultQueryFilterSum = Query.queryFilterSum(graph_name,
-                                                config["queryFilterSum"]["table_name"],
-                                                config["queryFilterSum"]["collection"],
-                                                config["queryFilterSum"]["fieldName"],
-                                                config["queryFilterSum"]["sumValue"],
-                                                config["queryFilterSum"]["value"])
+    # resultQueryFilterSum = Query.queryFilterSum(graph_name,
+    #                                             config["queryFilterSum"]["table_name"],
+    #                                             config["queryFilterSum"]["collection"],
+    #                                             config["queryFilterSum"]["fieldName"],
+    #                                             config["queryFilterSum"]["sumValue"],
+    #                                             config["queryFilterSum"]["value"])
