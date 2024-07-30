@@ -231,8 +231,8 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
 
@@ -272,7 +272,7 @@ if __name__ == "__main__":
     resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
                                     config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
                                           config["queryBFS_DFS"]["to_id"])
-    #
+
     resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
                                     config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
                                           config["queryBFS_DFS"]["to_id"])

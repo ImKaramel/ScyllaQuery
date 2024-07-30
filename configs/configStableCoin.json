@@ -15,8 +15,6 @@
     "degree": 1
   },
 
-
-
   "queryBFS_DFS": {
     "table_name": "token_transfers",
     "depth": 8,
