@@ -1,8 +1,8 @@
 {
   "Elliptic": {
-    "txis_class": 5644310,
-    "txs_edgelist" : 8543671,
-    "txs_features" : 7596188
+    "txid_class": 5644310,
+    "txs_edgelist" : 8543653,
+    "elliptic" : 19536086
   },
 
   "Mooc": {
@@ -12,7 +12,7 @@
   },
 
   "StableCoin":{
-    "token_transfers": 1938078090
+    "token_transfers": 2187189378
   },
 
   "RoadNet": {
