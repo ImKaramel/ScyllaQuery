@@ -10,17 +10,17 @@
   "queryFilterExtended": {
     "table_name": "token_transfers",
     "result":  "actionid",
-    "fieldName" : "value",
-    "value" : 2195.036686,
+    "fieldName" : "block_number",
+    "value" : 14669710,
     "degree": 1
   },
 
   "queryBFS_DFS": {
     "table_name": "token_transfers",
-    "depth": 8,
-    "startVertex": "'0x4f2c813dc8078a9ea7884ff287c0176603e7d1db'",
-    "fieldName" : "from_address",
-    "value" : 2571264.000,
+    "depth": 1,
+    "startVertex": "0xb9f1b79c70734a2b90717b9b26fcbe65da1548c5",
+    "fieldName" : "value",
+    "value" : 1000.0,
     "from_id": "from_address",
     "to_id": "to_address"
   },

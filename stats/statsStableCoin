@@ -43,3 +43,33 @@ executionTime 0.711432933807373 s
 peakMemoryUsage 6.20703125 KB
 
 
+queryBFS
+executionTime 0.1025228500366211 s
+peakMemoryUsage 5.79296875 KB
+
+
+queryDFS
+executionTime 0.008707761764526367 s
+peakMemoryUsage 5.7314453125 KB
+
+
+queryBFS
+executionTime 0.005883932113647461 s
+peakMemoryUsage 5.79296875 KB
+
+
+queryDFS
+executionTime 0.004605293273925781 s
+peakMemoryUsage 5.7314453125 KB
+
+
+queryBFS
+executionTime 180.79490900039673 s
+peakMemoryUsage 363.6875 KB
+
+
+queryDFS
+executionTime 32.9568030834198 s
+peakMemoryUsage 560.69921875 KB
+
+

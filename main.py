@@ -80,8 +80,9 @@ class ScyllaQuery:
         else:
             start_time = time.time()
             tracemalloc.start()
-            query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} >= {value} ALLOW FILTERING"
+            query_vertices = f"SELECT {result} FROM {table_name} WHERE {field_name} = {value} ALLOW FILTERING"
             rows = session.execute(query_vertices)
+            print(rows)
 
             vertex_degrees = {}
             for row in rows:
@@ -89,6 +90,7 @@ class ScyllaQuery:
                 query_degree = f"SELECT COUNT(*) FROM {table_name} WHERE {result} = {userid} ALLOW FILTERING"
                 edge_count = session.execute(query_degree).one().count  # Подсчитываем ребра
                 vertex_degrees[userid] = edge_count
+                print(vertex_degrees)
             end_time = time.time()
             snapshot = tracemalloc.take_snapshot()
             top_stats = snapshot.statistics('lineno')
@@ -100,6 +102,7 @@ class ScyllaQuery:
                 for userid, edge_count in vertex_degrees.items()
                 if edge_count >= degree
             ]
+
 
             with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
                 json.dump(result_vertices, file, indent=4)
@@ -120,10 +123,11 @@ class ScyllaQuery:
 
                 if level <= depth:
                     visited.add(node)
+                    # print(visited)
                     if graph == "RoadNet" or "Elliptic":
-                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = '{node}' ALLOW FILTERING"
                     else:
-                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = '{node}' AND {fieldName} > {value} ALLOW FILTERING"
                     result = session.execute(cql_query)
                     # print(visited)
                     for row in result:
@@ -158,9 +162,9 @@ class ScyllaQuery:
                     visited.add(node)
                     # print(visited)
                     if graph == "RoadNet" or "Elliptic":
-                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} ALLOW FILTERING"
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = '{node}' ALLOW FILTERING"
                     else:
-                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = {node} AND {fieldName} > {value} ALLOW FILTERING"
+                        cql_query = f"SELECT {to_id} FROM {table_name} WHERE {from_id} = '{node}' AND {fieldName} > {value} ALLOW FILTERING"
 
                     result = session.execute(cql_query)
                     for row in result:
@@ -243,10 +247,10 @@ if __name__ == "__main__":
     #     pass
 
 
-    resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
-                                          config["queryFilter"]["id"],
-                                          config["queryFilter"]["fieldName"],
-                                          config["queryFilter"]["value"])
+    # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
+    #                                       config["queryFilter"]["id"],
+    #                                       config["queryFilter"]["fieldName"],
+    #                                       config["queryFilter"]["value"])
 
 
     #
@@ -269,13 +273,13 @@ if __name__ == "__main__":
     #                                                       config["queryFilterExtended"]["value"])
     #
 
-    resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
-                                          config["queryBFS_DFS"]["to_id"])
-
-    resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
-                                    config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
-                                          config["queryBFS_DFS"]["to_id"])
+    # resultQueryBFS = Query.queryBFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
+    #                                       config["queryBFS_DFS"]["to_id"])
+    #
+    # resultQueryDFS = Query.queryDFS(graph_name, config["queryBFS_DFS"]["table_name"], config["queryBFS_DFS"]["startVertex"], config["queryBFS_DFS"]["depth"],
+    #                                 config["queryBFS_DFS"]["fieldName"], config["queryBFS_DFS"]["value"], config["queryBFS_DFS"]["from_id"],
+    #                                       config["queryBFS_DFS"]["to_id"])
 
 
 
