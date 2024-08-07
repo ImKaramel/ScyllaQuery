@@ -3,32 +3,37 @@
   "_edgeDefinitions": "(EdgeDefinition('Action2',fromCollections=[NodeId],toCollections=[NodeId]),)",
 
   "queryBFS_DFS": {
+    "table_name": "roadnet",
     "depth": 15,
-    "startVertex": "NodeId/1086292",
-    "fieldName" : "empty",
-    "value" : 0
+    "startVertex": "1086292",
+    "fieldName" : "fromnodeid",
+    "value" : 0,
+    "from_id": "fromnodeid",
+    "to_id": "tonodeid"
   },
 
   "queryFilter": {
-    "collection": "Action2",
-    "fieldName" : "empty",
-    "value" : 0
+    "table_name": "roadnet",
+    "id": "tonodeid",
+    "fieldName" : "fromnodeid",
+    "value" : 469
   },
 
   "queryFilterExtended": {
-    "collection": "NodeId",
-    "edge":  "Action2",
-    "fieldName" : "empty",
-    "value" : 0,
-    "degree": 10
+    "table_name": "roadnet",
+    "table_name2": "",
+    "result":  "fromnodeid",
+    "fieldName" : "tonodeid",
+    "value" : 1966398,
+    "degree": 3
   },
 
   "queryFilterSum": {
-    "collection": "NodeId",
-    "action": "Action2",
+    "table_name": "roadnet",
+    "collection": "empty",
     "fieldName" : "empty",
-    "value" : 0,
-    "sumValue": 0
+    "value" : 100000,
+    "sumValue": 598165819
   },
 
   "queryTriangles": {

@@ -1,43 +1,48 @@
 {
   "graphName" : "MoocGraph",
-  "_edgeDefinitions": "(EdgeDefinition('Action', fromCollections=[User], toCollections=[Target]),)",
+  "_edgeDefinitions": "(EdgeDefinition('actions', fromCollections=[User], toCollections=[Target]),)",
 
   "queryBFS_DFS": {
+    "table_name": "actions",
     "depth": 1,
-    "startVertex": "User/6956",
+    "startVertex": "6725",
     "fieldName" : "timestamp",
-    "value" : 2571264.000
+    "value" : 2571264.000,
+    "from_id": "userid",
+    "to_id": "targetid"
   },
 
   "queryFilter": {
     "table_name": "actions",
-    "fieldName" : "TIMESTAMP",
+    "id" : "actionid",
+    "fieldName" : "timestamp",
     "value" : 2571264.000
   },
 
   "queryFilterExtended": {
-    "collection": "User",
-    "edge":  "Action",
+    "table_name": "actions",
+    "table_name2" : "",
+    "result": "userid",
     "fieldName" : "timestamp",
     "value" : 2571264.000,
     "degree": 2
   },
 
   "queryFilterSum": {
-    "collection": "User",
-    "action": "Action",
+    "table_name": "actions",
+    "collection": "userid",
     "fieldName" : "timestamp",
     "value" : 100000,
     "sumValue": 598165819
   },
 
   "queryTriangles": {
-    "startVertex": "User/6956"
+    "startVertex": "userid/6956"
   },
 
-  "Action": {
+  "actions": {
         "_fields": {
-            "action_id": "",
+            "actionid": "",
             "timestamp": "",
             "label": "",
             "feature0": "",

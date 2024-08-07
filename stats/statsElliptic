@@ -1,0 +1,20 @@
+queryFilter
+executionTime 0.4233691692352295 s
+peakMemoryUsage 312.7802734375 KB
+
+
+queryFilterExtended
+executionTime 23.918561697006226 s
+peakMemoryUsage 9844.2265625 KB
+
+
+queryBFS
+executionTime 0.059067726135253906 s
+peakMemoryUsage 9844.2265625 KB
+
+
+queryDFS
+executionTime 0.08243703842163086 s
+peakMemoryUsage 9844.2265625 KB
+
+

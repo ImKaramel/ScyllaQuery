@@ -3,23 +3,28 @@
   "_edgeDefinitions": "(EdgeDefinition('Action3', fromCollections=[txId],toCollections=[txId]),)",
 
   "queryFilter": {
-    "collection": "txId",
-    "fieldName" : "size",
-    "value" : 85832
+    "table_name": "txid_class",
+    "id" : "txid",
+    "fieldName" : "classd",
+    "value": "'2'"
   },
   "queryFilterExtended": {
-    "collection": "txId",
-    "edge":  "Action3",
+    "table_name2": "txs_edgelist",
+    "table_name" : "elliptic",
+    "result": "txid",
     "fieldName" : "size",
     "value" : 3000,
-    "degree": 12
+    "degree": 1
   },
 
   "queryBFS_DFS": {
+    "table_name": "txs_edgelist",
     "depth": 9,
-    "startVertex": "txId/158652955",
-    "fieldName" : "size",
-    "value" : 100
+    "startVertex": "158652955",
+    "fieldName" : "txid1",
+    "value" : 100,
+    "from_id": "txid1",
+    "to_id": "txid2"
   },
 
   "queryFilterSum": {

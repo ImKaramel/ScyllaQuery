@@ -1,0 +1,34 @@
+[
+    {
+        "vertex": 6842,
+        "degree": 28
+    },
+    {
+        "vertex": 7026,
+        "degree": 10
+    },
+    {
+        "vertex": 6725,
+        "degree": 24
+    },
+    {
+        "vertex": 4786,
+        "degree": 186
+    },
+    {
+        "vertex": 195,
+        "degree": 25
+    },
+    {
+        "vertex": 3010,
+        "degree": 178
+    },
+    {
+        "vertex": 70,
+        "degree": 182
+    },
+    {
+        "vertex": 3070,
+        "degree": 233
+    }
+]

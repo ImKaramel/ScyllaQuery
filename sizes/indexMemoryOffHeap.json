@@ -1,0 +1,21 @@
+{
+  "Elliptic": {
+    "txid_class": 8556,
+    "txs_edgelist" : 11760,
+    "elliptic" : 25980
+  },
+
+  "Mooc": {
+    "actions": 18708,
+    "actions_labels" : 11832,
+    "actions_features": 11832
+  },
+
+  "StableCoin":{
+    "token_transfers": 2882800
+  },
+
+  "RoadNet": {
+    "roadnet": 108188
+  }
+}
