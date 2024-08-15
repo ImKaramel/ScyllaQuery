@@ -11,7 +11,7 @@
     "table_name": "token_transfers",
     "result":  "actionid",
     "fieldName" : "block_number",
-    "value" : 14669710,
+    "value" : 15693279,
     "degree": 1
   },
 
@@ -26,12 +26,14 @@
   },
 
   "queryFilterSum": {
-    "collection": "Address",
-    "action": "Action4",
-    "fieldName" : "value",
-    "value" : 80000,
-    "sumValue": 493112.608952
+    "table_name": "token_transfers",
+    "collection": "actionid",
+    "fieldName" : "time_stamp",
+    "value" : 1665110183,
+    "sumValue": 14649969
   },
+
+
 
   "queryTriangles": {
     "startVertex": "Address/0x46c47b6c38ba5a477a5b7db984fd5d8b3b14961f"

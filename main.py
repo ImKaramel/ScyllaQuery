@@ -197,15 +197,17 @@ class ScyllaQuery:
                 WHERE {fieldName} > %s ALLOW FILTERING
             """
             rows = session.execute(query, (value,))
+            # print(rows)
 
             user_sums = {}
 
             for row in rows:
-                userid = row.userid
+                userid = row.actionid
                 timestamp = getattr(row, fieldName)
                 if userid not in user_sums:
                     user_sums[userid] = 0.0
                 user_sums[userid] += timestamp
+                # print(user_sums)
 
             # Фильтруем результаты по сумме
             result = [
@@ -224,6 +226,62 @@ class ScyllaQuery:
             # print(result)
             return result
 
+
+    def queryTriangles(self, graph, table_name, fieldName, startVertex):
+        start_time = time.time()
+        tracemalloc.start()
+
+        # Сначала находим все классы, связанные с начальной вершиной
+        neighbors_query = f"""
+        SELECT {fieldName}, classd FROM {table_name}
+        WHERE {fieldName} = {startVertex} ALLOW FILTERING;
+        """
+
+        neighbors_rows = session.execute(neighbors_query)
+        print(neighbors_rows)
+
+        neighbors = {}
+        for row in neighbors_rows:
+            classd = row.classd
+            neighbor_query = f"""
+            SELECT {fieldName} FROM {table_name}
+            WHERE classd = '{classd}' ALLOW FILTERING;
+            """
+            neighbor_rows = session.execute(neighbor_query)
+            print(neighbors)
+            for neighbor in neighbor_rows:
+                # Используем getattr для доступа к значению столбца
+                neighbor_value = getattr(neighbor, fieldName)
+                if neighbor_value != startVertex:
+                    if classd not in neighbors:
+                        neighbors[classd] = []
+                    neighbors[classd].append(neighbor_value)
+
+        # Теперь ищем треугольники среди найденных соседей
+        triangles = []
+        for classd, vertices in neighbors.items():
+            print(triangles)
+            for i in range(len(vertices)):
+                for j in range(i + 1, len(vertices)):
+                    check_triangle_query = f"""
+                    SELECT COUNT(*) FROM {table_name}
+                    WHERE classd = '{classd}' AND {fieldName} = {vertices[j]} ALLOW FILTERING;
+                    """
+                    result = session.execute(check_triangle_query)
+                    if result.one()[0] > 0:
+                        triangles.append((startVertex, vertices[i], vertices[j]))
+
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryTriangles", end_time - start_time, top_stats[0].size / 1024)
+
+        # Сохраняем результаты в файл
+        with open(f"results/results{graph}/queryTriangles.json", "w") as file:
+            json.dump(triangles, file, indent=4)
+
+        return len(triangles), triangles
 
 
 if __name__ == "__main__":
@@ -289,3 +347,9 @@ if __name__ == "__main__":
     #                                             config["queryFilterSum"]["fieldName"],
     #                                             config["queryFilterSum"]["sumValue"],
     #                                             config["queryFilterSum"]["value"])
+
+
+    # resultQueryTriangles = Query.queryTriangles(graph_name, config["queryTriangles"]["table_name"],
+    #                                       config["queryTriangles"]["fieldName"],
+    #                                       config["queryTriangles"]["startVertex"])
+

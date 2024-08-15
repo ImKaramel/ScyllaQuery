@@ -36,7 +36,9 @@
   },
 
   "queryTriangles": {
-    "startVertex": "txId/230593839"
+    "table_name": "txid_class",
+    "fieldName": "txid",
+    "startVertex": 230593839
   },
 
   "Action3": "",
