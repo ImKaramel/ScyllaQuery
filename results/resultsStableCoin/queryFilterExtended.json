@@ -1,1 +1,566 @@
-[]
+[
+    {
+        "vertex": 14650221,
+        "degree": 1
+    },
+    {
+        "vertex": 14650148,
+        "degree": 1
+    },
+    {
+        "vertex": 14650249,
+        "degree": 1
+    },
+    {
+        "vertex": 14650185,
+        "degree": 1
+    },
+    {
+        "vertex": 14650217,
+        "degree": 1
+    },
+    {
+        "vertex": 14650275,
+        "degree": 1
+    },
+    {
+        "vertex": 14650267,
+        "degree": 1
+    },
+    {
+        "vertex": 14650242,
+        "degree": 1
+    },
+    {
+        "vertex": 14650147,
+        "degree": 1
+    },
+    {
+        "vertex": 14650201,
+        "degree": 1
+    },
+    {
+        "vertex": 14650168,
+        "degree": 1
+    },
+    {
+        "vertex": 14650244,
+        "degree": 1
+    },
+    {
+        "vertex": 14650176,
+        "degree": 1
+    },
+    {
+        "vertex": 14650189,
+        "degree": 1
+    },
+    {
+        "vertex": 14650228,
+        "degree": 1
+    },
+    {
+        "vertex": 14650247,
+        "degree": 1
+    },
+    {
+        "vertex": 14650215,
+        "degree": 1
+    },
+    {
+        "vertex": 14650234,
+        "degree": 1
+    },
+    {
+        "vertex": 14650144,
+        "degree": 1
+    },
+    {
+        "vertex": 14650194,
+        "degree": 1
+    },
+    {
+        "vertex": 14650173,
+        "degree": 1
+    },
+    {
+        "vertex": 14650212,
+        "degree": 1
+    },
+    {
+        "vertex": 14650179,
+        "degree": 1
+    },
+    {
+        "vertex": 14650239,
+        "degree": 1
+    },
+    {
+        "vertex": 14650252,
+        "degree": 1
+    },
+    {
+        "vertex": 14650253,
+        "degree": 1
+    },
+    {
+        "vertex": 14650224,
+        "degree": 1
+    },
+    {
+        "vertex": 14650163,
+        "degree": 1
+    },
+    {
+        "vertex": 14650203,
+        "degree": 1
+    },
+    {
+        "vertex": 14650140,
+        "degree": 1
+    },
+    {
+        "vertex": 14650170,
+        "degree": 1
+    },
+    {
+        "vertex": 14650180,
+        "degree": 1
+    },
+    {
+        "vertex": 14650152,
+        "degree": 1
+    },
+    {
+        "vertex": 14650166,
+        "degree": 1
+    },
+    {
+        "vertex": 14650227,
+        "degree": 1
+    },
+    {
+        "vertex": 14650266,
+        "degree": 1
+    },
+    {
+        "vertex": 14650270,
+        "degree": 1
+    },
+    {
+        "vertex": 14650269,
+        "degree": 1
+    },
+    {
+        "vertex": 14650146,
+        "degree": 1
+    },
+    {
+        "vertex": 14650151,
+        "degree": 1
+    },
+    {
+        "vertex": 14650186,
+        "degree": 1
+    },
+    {
+        "vertex": 14650183,
+        "degree": 1
+    },
+    {
+        "vertex": 14650137,
+        "degree": 1
+    },
+    {
+        "vertex": 14650188,
+        "degree": 1
+    },
+    {
+        "vertex": 14650263,
+        "degree": 1
+    },
+    {
+        "vertex": 14650231,
+        "degree": 1
+    },
+    {
+        "vertex": 14650274,
+        "degree": 1
+    },
+    {
+        "vertex": 14650177,
+        "degree": 1
+    },
+    {
+        "vertex": 14650150,
+        "degree": 1
+    },
+    {
+        "vertex": 14650216,
+        "degree": 1
+    },
+    {
+        "vertex": 14650199,
+        "degree": 1
+    },
+    {
+        "vertex": 14650207,
+        "degree": 1
+    },
+    {
+        "vertex": 14650229,
+        "degree": 1
+    },
+    {
+        "vertex": 14650175,
+        "degree": 1
+    },
+    {
+        "vertex": 14650162,
+        "degree": 1
+    },
+    {
+        "vertex": 14650240,
+        "degree": 1
+    },
+    {
+        "vertex": 14650225,
+        "degree": 1
+    },
+    {
+        "vertex": 14650223,
+        "degree": 1
+    },
+    {
+        "vertex": 14650260,
+        "degree": 1
+    },
+    {
+        "vertex": 14650237,
+        "degree": 1
+    },
+    {
+        "vertex": 14650256,
+        "degree": 1
+    },
+    {
+        "vertex": 14650178,
+        "degree": 1
+    },
+    {
+        "vertex": 14650154,
+        "degree": 1
+    },
+    {
+        "vertex": 14650235,
+        "degree": 1
+    },
+    {
+        "vertex": 14650262,
+        "degree": 1
+    },
+    {
+        "vertex": 14650182,
+        "degree": 1
+    },
+    {
+        "vertex": 14650141,
+        "degree": 1
+    },
+    {
+        "vertex": 14650243,
+        "degree": 1
+    },
+    {
+        "vertex": 14650211,
+        "degree": 1
+    },
+    {
+        "vertex": 14650138,
+        "degree": 1
+    },
+    {
+        "vertex": 14650135,
+        "degree": 1
+    },
+    {
+        "vertex": 14650241,
+        "degree": 1
+    },
+    {
+        "vertex": 14650233,
+        "degree": 1
+    },
+    {
+        "vertex": 14650208,
+        "degree": 1
+    },
+    {
+        "vertex": 14650174,
+        "degree": 1
+    },
+    {
+        "vertex": 14650160,
+        "degree": 1
+    },
+    {
+        "vertex": 14650268,
+        "degree": 1
+    },
+    {
+        "vertex": 14650220,
+        "degree": 1
+    },
+    {
+        "vertex": 14650161,
+        "degree": 1
+    },
+    {
+        "vertex": 14650198,
+        "degree": 1
+    },
+    {
+        "vertex": 14650265,
+        "degree": 1
+    },
+    {
+        "vertex": 14650248,
+        "degree": 1
+    },
+    {
+        "vertex": 14650195,
+        "degree": 1
+    },
+    {
+        "vertex": 14650142,
+        "degree": 1
+    },
+    {
+        "vertex": 14650196,
+        "degree": 1
+    },
+    {
+        "vertex": 14650219,
+        "degree": 1
+    },
+    {
+        "vertex": 14650264,
+        "degree": 1
+    },
+    {
+        "vertex": 14650271,
+        "degree": 1
+    },
+    {
+        "vertex": 14650193,
+        "degree": 1
+    },
+    {
+        "vertex": 14650169,
+        "degree": 1
+    },
+    {
+        "vertex": 14650222,
+        "degree": 1
+    },
+    {
+        "vertex": 14650206,
+        "degree": 1
+    },
+    {
+        "vertex": 14650155,
+        "degree": 1
+    },
+    {
+        "vertex": 14650153,
+        "degree": 1
+    },
+    {
+        "vertex": 14650246,
+        "degree": 1
+    },
+    {
+        "vertex": 14650159,
+        "degree": 1
+    },
+    {
+        "vertex": 14650187,
+        "degree": 1
+    },
+    {
+        "vertex": 14650236,
+        "degree": 1
+    },
+    {
+        "vertex": 14650197,
+        "degree": 1
+    },
+    {
+        "vertex": 14650181,
+        "degree": 1
+    },
+    {
+        "vertex": 14650272,
+        "degree": 1
+    },
+    {
+        "vertex": 14650172,
+        "degree": 1
+    },
+    {
+        "vertex": 14650167,
+        "degree": 1
+    },
+    {
+        "vertex": 14650245,
+        "degree": 1
+    },
+    {
+        "vertex": 14650136,
+        "degree": 1
+    },
+    {
+        "vertex": 14650209,
+        "degree": 1
+    },
+    {
+        "vertex": 14650145,
+        "degree": 1
+    },
+    {
+        "vertex": 14650257,
+        "degree": 1
+    },
+    {
+        "vertex": 14650143,
+        "degree": 1
+    },
+    {
+        "vertex": 14650226,
+        "degree": 1
+    },
+    {
+        "vertex": 14650200,
+        "degree": 1
+    },
+    {
+        "vertex": 14650232,
+        "degree": 1
+    },
+    {
+        "vertex": 14650259,
+        "degree": 1
+    },
+    {
+        "vertex": 14650191,
+        "degree": 1
+    },
+    {
+        "vertex": 14650214,
+        "degree": 1
+    },
+    {
+        "vertex": 14650149,
+        "degree": 1
+    },
+    {
+        "vertex": 14650238,
+        "degree": 1
+    },
+    {
+        "vertex": 14650184,
+        "degree": 1
+    },
+    {
+        "vertex": 14650205,
+        "degree": 1
+    },
+    {
+        "vertex": 14650139,
+        "degree": 1
+    },
+    {
+        "vertex": 14650273,
+        "degree": 1
+    },
+    {
+        "vertex": 14650250,
+        "degree": 1
+    },
+    {
+        "vertex": 14650204,
+        "degree": 1
+    },
+    {
+        "vertex": 14650230,
+        "degree": 1
+    },
+    {
+        "vertex": 14650164,
+        "degree": 1
+    },
+    {
+        "vertex": 14650261,
+        "degree": 1
+    },
+    {
+        "vertex": 14650251,
+        "degree": 1
+    },
+    {
+        "vertex": 14650255,
+        "degree": 1
+    },
+    {
+        "vertex": 14650157,
+        "degree": 1
+    },
+    {
+        "vertex": 14650213,
+        "degree": 1
+    },
+    {
+        "vertex": 14650210,
+        "degree": 1
+    },
+    {
+        "vertex": 14650190,
+        "degree": 1
+    },
+    {
+        "vertex": 14650156,
+        "degree": 1
+    },
+    {
+        "vertex": 14650254,
+        "degree": 1
+    },
+    {
+        "vertex": 14650171,
+        "degree": 1
+    },
+    {
+        "vertex": 14650258,
+        "degree": 1
+    },
+    {
+        "vertex": 14650202,
+        "degree": 1
+    },
+    {
+        "vertex": 14650192,
+        "degree": 1
+    },
+    {
+        "vertex": 14650218,
+        "degree": 1
+    },
+    {
+        "vertex": 14650158,
+        "degree": 1
+    },
+    {
+        "vertex": 14650165,
+        "degree": 1
+    }
+]
