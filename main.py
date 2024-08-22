@@ -288,11 +288,13 @@ class ScyllaQuery:
         return len(triangles), triangles
 
     def queryShortPath(self, graph, table_name, fromVertex, value1, toVertex, value2):
-        start_time = time.time()
-        tracemalloc.start()
+        # start_time = time.time()
+        # tracemalloc.start()
 
         query = f"SELECT {fromVertex}, {toVertex} FROM {table_name}"
         rows = session.execute(query)
+        start_time = time.time()
+        tracemalloc.start()
         dict = defaultdict(list)
         for row in rows:
             source = getattr(row, fromVertex)
@@ -353,9 +355,9 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
 

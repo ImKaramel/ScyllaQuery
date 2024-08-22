@@ -93,3 +93,13 @@ executionTime 807.5955150127411 s
 peakMemoryUsage 50.939453125 KB
 
 
+queryShortPath
+executionTime 1741.6826748847961 s
+peakMemoryUsage 1580959.5908203125 KB
+
+
+queryShortPath
+executionTime 1646.732873916626 s
+peakMemoryUsage 1580247.0791015625 KB
+
+
