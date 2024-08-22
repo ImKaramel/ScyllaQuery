@@ -21,10 +21,9 @@
 
   "queryFilterExtended": {
     "table_name": "roadnet",
-    "table_name2": "",
     "result":  "fromnodeid",
     "fieldName" : "tonodeid",
-    "value" : 1966398,
+    "value" : 1954679,
     "degree": 3
   },
 

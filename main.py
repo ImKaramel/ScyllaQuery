@@ -70,8 +70,9 @@ class ScyllaQuery:
             result_vertices = [
                 {'vertex': userid, 'degree': edge_count}
                 for userid, edge_count in vertex_degrees.items()
-                if edge_count >= degree
+                if edge_count == degree
             ]
+            # print(result_vertices)
 
             with open(f"results/results{graph}/queryFilterExtended.json", "w") as file:
                 json.dump(result_vertices, file, indent=4)
@@ -292,9 +293,9 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
 
