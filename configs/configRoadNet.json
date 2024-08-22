@@ -41,19 +41,12 @@
     "startVertex": "NodeId/1210809"
   },
 
-    "Action": {
-        "_fields": {
-        }
-    },
-    "To": {
-        "_fields": {
-            "NodeId": ""
-        }
-    },
-    "From": {
-        "_fields": {
-            "NodeId": ""
-        }
-    }
+  "queryShortPath": {
+    "table_name": "roadnet",
+    "fromVertex": "fromnodeid",
+     "value1": 1971276,
+    "toVertex": "tonodeid",
+     "value2": 1969579
+  }
 
 }

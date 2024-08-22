@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS elliptic (
+        txid int PRIMARY KEY,
+        aggregate_feature_1 float,
+        fees float,
+        in_btc_max float,
+        in_btc_mean float,
+        in_btc_median float,
+        in_btc_min float,
+        in_btc_total float,
+        in_txs_degree float,
+        local_feature_1 float,
+        num_input_addresses float,
+        num_output_addresses float,
+        out_btc_max float,
+        out_btc_mean float,
+        out_btc_median float,
+        out_btc_min float,
+        out_btc_total float,
+        out_txs_degree float,
+        size float,
+        time_step float,
+        total_btc float
+    );"""

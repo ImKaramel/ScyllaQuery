@@ -1,8 +1,11 @@
 import json
 import sys
 import tracemalloc
+from collections import defaultdict, deque
+
 from cassandra.cluster import Cluster
 import time
+import networkx as nx
 # path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/"
 path = "/Users/madina/Downloads/ScyllaQuery/"
 
@@ -284,6 +287,63 @@ class ScyllaQuery:
 
         return len(triangles), triangles
 
+    def queryShortPath(self, graph, table_name, fromVertex, value1, toVertex, value2):
+        start_time = time.time()
+        tracemalloc.start()
+
+        query = f"SELECT {fromVertex}, {toVertex} FROM {table_name}"
+        rows = session.execute(query)
+        dict = defaultdict(list)
+        for row in rows:
+            source = getattr(row, fromVertex)
+            target = getattr(row, toVertex)
+            dict[source].append(target)
+
+        queue = deque([[value1]])
+        visited = set()
+        paths = {value1: [value1]}
+
+        # Поиск кратчайшего пути
+        while queue:
+            path = queue.popleft()
+            vertex = path[-1]
+
+            if vertex in visited:
+                continue
+
+            for neighbor in dict[vertex]:
+                if neighbor not in visited:
+                    new_path = list(path)
+                    new_path.append(neighbor)
+                    queue.append(new_path)
+                    paths[neighbor] = new_path
+
+                    if neighbor == value2:
+                        result = {'path': new_path}
+                        end_time = time.time()
+                        snapshot = tracemalloc.take_snapshot()
+                        top_stats = snapshot.statistics('lineno')
+                        self.getStats(graph, "queryShortPath", end_time - start_time, top_stats[0].size / 1024 )
+
+
+                        with open(f"results/results{graph}/queryShortPath.json", 'w') as file:
+                            json.dump(result, file, indent=4)
+
+                        return result
+
+            visited.add(vertex)
+        result = {'path': None}
+        with open(f"results/results{graph}/queryShortPath.json", "w") as file:
+            json.dump(result, file, indent=4)
+        end_time = time.time()
+        snapshot = tracemalloc.take_snapshot()
+        top_stats = snapshot.statistics('lineno')
+
+        self.getStats(graph, "queryShortPath", end_time - start_time, top_stats[0].size / 1024 )
+        return result
+
+
+
 
 if __name__ == "__main__":
     # config_path = sys.argv[1]
@@ -313,12 +373,12 @@ if __name__ == "__main__":
 
 
     #
-    resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
-                                                          config["queryFilterExtended"]["table_name"],
-                                                          config["queryFilterExtended"]["result"],
-                                                          config["queryFilterExtended"]["degree"],
-                                                          config["queryFilterExtended"]["fieldName"],
-                                                          config["queryFilterExtended"]["value"])
+    # resultQueryFilterExtended = Query.queryFilterExtended(graph_name,
+    #                                                       config["queryFilterExtended"]["table_name"],
+    #                                                       config["queryFilterExtended"]["result"],
+    #                                                       config["queryFilterExtended"]["degree"],
+    #                                                       config["queryFilterExtended"]["fieldName"],
+    #                                                       config["queryFilterExtended"]["value"])
 
     # resultQueryFilter = Query.queryFilter(graph_name, config["queryFilter"]["table_name"],
     #                                       config["queryFilter"]["id"],
@@ -353,4 +413,12 @@ if __name__ == "__main__":
     # resultQueryTriangles = Query.queryTriangles(graph_name, config["queryTriangles"]["table_name"],
     #                                       config["queryTriangles"]["fieldName"],
     #                                       config["queryTriangles"]["startVertex"])
+
+
+    resultQueryShortPath = Query.queryShortPath(graph_name,
+                                        config["queryShortPath"]["table_name"],
+                                        config["queryShortPath"]["fromVertex"],
+                                        config["queryShortPath"]["value1"],
+                                        config["queryShortPath"]["toVertex"],
+                                        config["queryShortPath"]["value2"],)
 

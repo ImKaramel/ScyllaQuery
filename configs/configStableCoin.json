@@ -37,5 +37,13 @@
 
   "queryTriangles": {
     "startVertex": "Address/0x46c47b6c38ba5a477a5b7db984fd5d8b3b14961f"
+  },
+
+  "queryShortPath": {
+    "table_name": "token_transfers",
+    "fromVertex": "from_address",
+     "value1": "0xb5d85cbf7cb3ee0d56b3bb207d5fc4b82f43f511",
+    "toVertex": "to_address",
+     "value2": "0x517aaeccdf967a8c4f1195c61be58fd4ef981ede"
   }
 }

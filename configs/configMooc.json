@@ -40,17 +40,12 @@
     "startVertex": "userid/6956"
   },
 
-  "actions": {
-        "_fields": {
-            "actionid": "",
-            "timestamp": "",
-            "label": "",
-            "feature0": "",
-            "feature1": "",
-            "feature2": "",
-            "feature3": ""
-        }
-    }
-
+  "queryShortPath": {
+    "table_name": "actions",
+    "fromVertex": "userid",
+     "value1": 6,
+    "toVertex": "targetid",
+     "value2": 71
+  }
 
 }

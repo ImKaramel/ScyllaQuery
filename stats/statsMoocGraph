@@ -1,4 +1,3 @@
-
 queryFilter
 executionTime 0.01803898811340332 s
 peakMemoryUsage 6.20703125 KB
@@ -22,5 +21,15 @@ peakMemoryUsage 51.7578125 KB
 queryFilterSum
 executionTime 18.415216207504272 s
 peakMemoryUsage 306.0244140625 KB
+
+
+queryShortPath
+executionTime 10.811613321304321 s
+peakMemoryUsage 4208.1875 KB
+
+
+queryShortPath
+executionTime 11.296401262283325 s
+peakMemoryUsage 4208.1875 KB
 
 
