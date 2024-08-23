@@ -213,7 +213,6 @@ class ScyllaQuery:
                 user_sums[userid] += timestamp
                 # print(user_sums)
 
-            # Фильтруем результаты по сумме
             result = [
                 {'vertex': userid, 'sum': total_sum}
                 for userid, total_sum in user_sums.items()
@@ -235,7 +234,6 @@ class ScyllaQuery:
         start_time = time.time()
         tracemalloc.start()
 
-        # Сначала находим все классы, связанные с начальной вершиной
         neighbors_query = f"""
         SELECT {fieldName}, classd FROM {table_name}
         WHERE {fieldName} = {startVertex} ALLOW FILTERING;
@@ -254,14 +252,12 @@ class ScyllaQuery:
             neighbor_rows = session.execute(neighbor_query)
             print(neighbors)
             for neighbor in neighbor_rows:
-                # Используем getattr для доступа к значению столбца
                 neighbor_value = getattr(neighbor, fieldName)
                 if neighbor_value != startVertex:
                     if classd not in neighbors:
                         neighbors[classd] = []
                     neighbors[classd].append(neighbor_value)
 
-        # Теперь ищем треугольники среди найденных соседей
         triangles = []
         for classd, vertices in neighbors.items():
             print(triangles)
@@ -288,9 +284,6 @@ class ScyllaQuery:
         return len(triangles), triangles
 
     def queryShortPath(self, graph, table_name, fromVertex, value1, toVertex, value2):
-        # start_time = time.time()
-        # tracemalloc.start()
-
         query = f"SELECT {fromVertex}, {toVertex} FROM {table_name}"
         rows = session.execute(query)
         start_time = time.time()
@@ -305,7 +298,6 @@ class ScyllaQuery:
         visited = set()
         paths = {value1: [value1]}
 
-        # Поиск кратчайшего пути
         while queue:
             path = queue.popleft()
             vertex = path[-1]
@@ -356,8 +348,8 @@ if __name__ == "__main__":
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
 

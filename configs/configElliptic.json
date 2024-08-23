@@ -43,9 +43,9 @@
 
    "queryShortPath": {
      "table_name": "elliptic",
-    "fromVertex": "txid",
-     "value1": 10853450,
-    "toVertex": "txid",
-     "value2": 157642505
+    "fromVertex": "time_step",
+     "value1": 17.0,
+    "toVertex": "size",
+     "value2": 256.0
   }
 }
