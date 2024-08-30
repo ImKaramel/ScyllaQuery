@@ -37,7 +37,9 @@
   },
 
   "queryTriangles": {
-    "startVertex": "userid/6956"
+    "table_name": "actions",
+    "fieldName": "userid",
+    "fieldName2": "targetid"
   },
 
   "queryShortPath": {

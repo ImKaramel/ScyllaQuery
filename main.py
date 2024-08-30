@@ -206,7 +206,7 @@ class ScyllaQuery:
             user_sums = {}
 
             for row in rows:
-                userid = row.actionid
+                userid =  getattr(row, collection)
                 timestamp = getattr(row, fieldName)
                 if userid not in user_sums:
                     user_sums[userid] = 0.0
@@ -230,46 +230,45 @@ class ScyllaQuery:
             return result
 
 
-    def queryTriangles(self, graph, table_name, fieldName, startVertex):
+    def queryTriangles(self, graph, table_name, fieldName, fieldName2):
         start_time = time.time()
         tracemalloc.start()
 
-        neighbors_query = f"""
-        SELECT {fieldName}, classd FROM {table_name}
-        WHERE {fieldName} = {startVertex} ALLOW FILTERING;
-        """
+        query = f"SELECT {fieldName}, {fieldName2} FROM {table_name}"
+        edges = session.execute(query)
 
-        neighbors_rows = session.execute(neighbors_query)
-        print(neighbors_rows)
+        edges_list = [(getattr(row, fieldName), getattr(row, fieldName2)) for row in edges]
 
-        neighbors = {}
-        for row in neighbors_rows:
-            classd = row.classd
-            neighbor_query = f"""
-            SELECT {fieldName} FROM {table_name}
-            WHERE classd = '{classd}' ALLOW FILTERING;
-            """
-            neighbor_rows = session.execute(neighbor_query)
-            print(neighbors)
-            for neighbor in neighbor_rows:
-                neighbor_value = getattr(neighbor, fieldName)
-                if neighbor_value != startVertex:
-                    if classd not in neighbors:
-                        neighbors[classd] = []
-                    neighbors[classd].append(neighbor_value)
+        edge_set = set(edges_list)
 
-        triangles = []
-        for classd, vertices in neighbors.items():
-            print(triangles)
-            for i in range(len(vertices)):
-                for j in range(i + 1, len(vertices)):
-                    check_triangle_query = f"""
-                    SELECT COUNT(*) FROM {table_name}
-                    WHERE classd = '{classd}' AND {fieldName} = {vertices[j]} ALLOW FILTERING;
-                    """
-                    result = session.execute(check_triangle_query)
-                    if result.one()[0] > 0:
-                        triangles.append((startVertex, vertices[i], vertices[j]))
+        adjacency_dict = {}
+        for (a, b) in edges_list:
+            if a not in adjacency_dict:
+                adjacency_dict[a] = set()
+            if b not in adjacency_dict:
+                adjacency_dict[b] = set()
+            adjacency_dict[a].add(b)
+            adjacency_dict[b].add(a)
+
+        triangles = set()
+        for a in adjacency_dict:
+            neighbors_a = adjacency_dict[a]
+            for b in neighbors_a:
+                if b > a:
+                    neighbors_b = adjacency_dict[b]
+                    common_neighbors = neighbors_a.intersection(neighbors_b)
+                    for c in common_neighbors:
+                        if c > b:
+                            triangle = tuple(sorted([a, b, c]))
+                            triangles.add(triangle)
+
+        # Печать найденных треугольников
+        # if not triangles:
+        #     print("Треугольники не найдены.")
+        # else:
+        #     for triangle in triangles:
+        #         print(f'Triangle: {triangle}')
+
 
         end_time = time.time()
         snapshot = tracemalloc.take_snapshot()
@@ -277,11 +276,17 @@ class ScyllaQuery:
 
         self.getStats(graph, "queryTriangles", end_time - start_time, top_stats[0].size / 1024)
 
-        # Сохраняем результаты в файл
-        with open(f"results/results{graph}/queryTriangles.json", "w") as file:
-            json.dump(triangles, file, indent=4)
+        triangle_list = [{"triangle": list(triangle)} for triangle in triangles]
+        triangle_count = len(triangles)
+        result = {
+            "triangle_count": triangle_count,
+            "triangles": triangle_list
+        }
 
-        return len(triangles), triangles
+        with open(f"results/results{graph}/queryTriangles.json", "w") as file:
+            json.dump(result, file, indent=4)
+
+        # return len(triangles), triangles
 
     def queryShortPath(self, graph, table_name, fromVertex, value1, toVertex, value2):
         query = f"SELECT {fromVertex}, {toVertex} FROM {table_name}"
@@ -345,10 +350,10 @@ if __name__ == "__main__":
     # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configElliptic.json"
     # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configMooc.json"
     #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQuery/configs/configRoadNet.json"
-    #config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
+    # config_path = "/Users/assistentka_professora/Desktop/Scylla/ScyllaQueryconfigs/configStableCoin.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configMooc.json"
-    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
-    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
+    config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configRoadNet.json"
+    # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configElliptic.json"
     # config_path = "/Users/madina/Downloads/ScyllaQuery/configs/configStableCoin.json"
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -404,15 +409,15 @@ if __name__ == "__main__":
     #                                             config["queryFilterSum"]["value"])
 
 
-    # resultQueryTriangles = Query.queryTriangles(graph_name, config["queryTriangles"]["table_name"],
-    #                                       config["queryTriangles"]["fieldName"],
-    #                                       config["queryTriangles"]["startVertex"])
+    resultQueryTriangles = Query.queryTriangles(graph_name, config["queryTriangles"]["table_name"],
+                                          config["queryTriangles"]["fieldName"],
+                                          config["queryTriangles"]["fieldName2"])
 
 
-    resultQueryShortPath = Query.queryShortPath(graph_name,
-                                        config["queryShortPath"]["table_name"],
-                                        config["queryShortPath"]["fromVertex"],
-                                        config["queryShortPath"]["value1"],
-                                        config["queryShortPath"]["toVertex"],
-                                        config["queryShortPath"]["value2"],)
+    # resultQueryShortPath = Query.queryShortPath(graph_name,
+    #                                     config["queryShortPath"]["table_name"],
+    #                                     config["queryShortPath"]["fromVertex"],
+    #                                     config["queryShortPath"]["value1"],
+    #                                     config["queryShortPath"]["toVertex"],
+    #                                     config["queryShortPath"]["value2"],)
 

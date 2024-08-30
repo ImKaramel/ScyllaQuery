@@ -33,10 +33,10 @@
     "sumValue": 14649969
   },
 
-
-
   "queryTriangles": {
-    "startVertex": "Address/0x46c47b6c38ba5a477a5b7db984fd5d8b3b14961f"
+    "table_name": "token_transfers",
+    "fieldName": "from_address",
+    "fieldName2": "to_address"
   },
 
   "queryShortPath": {

@@ -23,5 +23,28 @@ executionTime 7.652519941329956 s
 peakMemoryUsage 5616.2158203125 KB
 
 
+queryFilterSum
+executionTime 11.621449947357178 s
+peakMemoryUsage 5120.0234375 KB
+
+
+queryTriangles
+executionTime 33.633618116378784 s
+peakMemoryUsage 34050.65625 KB
+
+
+queryTriangles
+executionTime 9.36155891418457 s
+peakMemoryUsage 34050.65625 KB
+
+
+queryTriangles
+executionTime 18.27993893623352 s
+peakMemoryUsage 34050.65625 KB
+
+
+queryTriangles
+executionTime 7.012397050857544 s
+peakMemoryUsage 34050.65625 KB
 
 

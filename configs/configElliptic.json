@@ -28,17 +28,18 @@
   },
 
   "queryFilterSum": {
-    "collection": "txId",
-    "action": "Action3",
+    "table_name": "elliptic",
+    "collection":"txid",
     "fieldName" : "size",
-    "value" : 300,
-    "sumValue": 494082
+    "value" : 225.0,
+    "sumValue": 20000
   },
 
+
   "queryTriangles": {
-    "table_name": "txid_class",
-    "fieldName": "txid",
-    "startVertex": 230593839
+    "table_name": "txs_edgelist",
+    "fieldName": "txid1",
+    "fieldName2": "txid2"
   },
 
    "queryShortPath": {

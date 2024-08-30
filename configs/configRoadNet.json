@@ -35,10 +35,11 @@
     "sumValue": 598165819
   },
 
+
   "queryTriangles": {
-    "collection" : "NodeId",
-    "startVertex2": "NodeId/1086292",
-    "startVertex": "NodeId/1210809"
+    "table_name": "roadnet",
+    "fieldName": "fromnodeid",
+    "fieldName2": "tonodeid"
   },
 
   "queryShortPath": {
